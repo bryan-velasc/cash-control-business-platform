@@ -2,6 +2,31 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.2.2] - 2026-06-14
+
+### Agregado
+
+- Header móvil para la página web.
+- Menú inferior móvil.
+- Botón de carrito en versión celular.
+- Carrito desplegable lateral en móvil.
+- Contador de productos en carrito.
+- Funciones JavaScript para abrir y cerrar carrito móvil.
+
+### Mejorado
+
+- Adaptación responsive del dashboard.
+- Catálogo en dos columnas para celular.
+- Mejor visualización de filtros en móvil.
+- Mejor comportamiento de modales en pantallas pequeñas.
+
+### Pendiente
+
+- Optimizar detalles visuales finales en móvil.
+- Conectar catálogo con backend.
+- Conectar stock real con Cash Control.
+- Conectar clientes, pagos y fidelidad con datos reales.
+
 ## [0.2.1] - 2026-06-14
 
 ### Agregado
