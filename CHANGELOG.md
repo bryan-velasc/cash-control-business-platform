@@ -2,6 +2,22 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.1.1] - 2026-06-14
+
+### Agregado
+
+- Importación de la página web actual de venta de dulces.
+- Integración de la web dentro de la carpeta `web-dulces/`.
+- Fusión de la rama `feature/importar-web-dulces` con `main`.
+- Creación de base para iniciar el rediseño web.
+
+### Pendiente
+
+- Revisar estructura real de archivos HTML, CSS, JavaScript e imágenes.
+- Mejorar diseño visual.
+- Preparar catálogo para conexión futura con backend.
+- Documentar cambios visuales y técnicos.
+
 ## [0.1.0] - 2026-06-14
 
 ### Agregado
