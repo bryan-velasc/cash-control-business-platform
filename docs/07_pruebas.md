@@ -600,6 +600,72 @@ Completado.
 
 Las funciones actuales son demostrativas. En una fase posterior se conectarán con FastAPI y Cash Control para usar datos reales de clientes, pagos, fidelidad y ventas.
 
+---
+
+## PRU-008: Verificar diseño responsive móvil
+
+### ID de prueba
+
+PRU-008
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Página web / Responsive
+
+### Función probada
+
+Verificar que la página web tipo dashboard funcione correctamente en dispositivos móviles.
+
+### Archivos modificados
+
+- `web-dulces/index.html`
+- `web-dulces/css/estilos.css`
+- `web-dulces/js/app.js`
+
+### Elementos probados
+
+- Header móvil.
+- Menú inferior móvil.
+- Botón de carrito móvil.
+- Apertura y cierre del carrito.
+- Catálogo en dos columnas.
+- Buscador.
+- Filtros.
+- Modales.
+- Botón de pago por WhatsApp.
+
+### Pasos realizados
+
+1. Se abrió la página desde `web-dulces/index.html`.
+2. Se activó el modo responsive del navegador.
+3. Se probó el diseño en tamaño celular.
+4. Se agregaron productos al carrito.
+5. Se abrió el carrito desde el botón superior.
+6. Se cerró el carrito desde el botón `×`.
+7. Se probaron los botones del menú inferior.
+8. Se verificó que los modales funcionaran correctamente.
+9. Se verificó que el catálogo se acomodara en dos columnas.
+
+### Resultado esperado
+
+La página debe adaptarse correctamente a celular sin romper el diseño ni ocultar funciones importantes.
+
+### Resultado obtenido
+
+La página ahora cuenta con versión móvil funcional. Se agregó encabezado móvil, menú inferior, carrito desplegable y ajustes responsive para catálogo, filtros, buscador y modales.
+
+### Estado
+
+Completado.
+
+### Observaciones
+
+El diseño móvil mantiene la estética dashboard oscuro, pero adapta la navegación para que sea más usable en celulares.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
