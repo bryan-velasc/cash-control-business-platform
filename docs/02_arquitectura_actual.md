@@ -56,3 +56,25 @@ Muestra productos estáticos
         |
         v
 No existe conexión directa con Cash Control todavía
+
+---
+
+## Actualización: importación de página web actual
+
+La página web actual de venta de dulces fue importada al repositorio dentro de la carpeta `web-dulces/`.
+
+Esta importación permite trabajar el rediseño, control de versiones, documentación y futuras conexiones con Cash Control desde un entorno organizado.
+
+La página se mantiene como frontend estático y será modificada por fases para evitar romper su funcionamiento actual.
+
+## Estado después de la importación
+
+- La página ya forma parte del repositorio.
+- La página se encuentra dentro de `web-dulces/`.
+- El proyecto ya puede controlar cambios mediante Git y GitHub.
+- Se creó una rama específica para importar la página.
+- La rama fue fusionada con `main`.
+
+## Próxima fase
+
+La siguiente fase consiste en rediseñar la página web, mejorar colores, estructura visual, presentación de productos y preparar la base para futuras conexiones con el backend.
