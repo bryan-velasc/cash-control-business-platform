@@ -15,6 +15,7 @@
 
         <div class="card perfil-card">
             <h2>Customer Profile</h2>
+
             <div class="perfil-info">
                 <div class="avatar">BV</div>
                 <div>
@@ -30,7 +31,7 @@
                 </div>
                 <div>
                     <span>Compras:</span>
-                    <strong>0</strong>
+                    <strong id="comprasCliente">0</strong>
                 </div>
                 <div>
                     <span>Loyalty Points:</span>
@@ -42,10 +43,12 @@
         <div class="card fidelidad-card">
             <div class="fidelidad-header">
                 <h2>Programa de Fidelidad</h2>
-                <span>›</span>
+                <span onclick="abrirModal('fidelidad')">›</span>
             </div>
+
             <h1 id="pointsView">0 points</h1>
             <p>Gana puntos por cada compra</p>
+
             <div class="recompensa">
                 <span>🏆</span>
                 <p>Premium Reward</p>
@@ -84,11 +87,11 @@
         </div>
 
         <ul>
-            <li class="activo">Products</li>
-            <li>Catalog</li>
-            <li>Clientes</li>
-            <li>Fidelidad</li>
-            <li>Pagos</li>
+            <li class="activo" onclick="navegarSeccion(this, 'productos')">Products</li>
+            <li onclick="navegarSeccion(this, 'catalogo')">Catalog</li>
+            <li onclick="abrirModal('clientes')">Clientes</li>
+            <li onclick="abrirModal('fidelidad')">Fidelidad</li>
+            <li onclick="abrirModal('pagos')">Pagos</li>
         </ul>
     </nav>
 
@@ -130,6 +133,18 @@
                 <img src="img/dulces/cacahuate-habanero.jpg" alt="Cacahuate Habanero">
                 <h3>Cacahuate Habanero</h3>
                 <button onclick="agregarCarrito('Cacahuate Habanero', 15)">Añadir al Carrito</button>
+            </article>
+
+            <article class="producto" data-name="Cacahuate Hotnug" data-category="botanas" data-price="15">
+                <img src="img/dulces/cacahuate-hotnug.jpg" alt="Cacahuate Hotnug">
+                <h3>Cacahuate Hotnug</h3>
+                <button onclick="agregarCarrito('Cacahuate Hotnug', 15)">Añadir al Carrito</button>
+            </article>
+
+            <article class="producto" data-name="Cacahuate Queso" data-category="botanas" data-price="15">
+                <img src="img/dulces/cacahuate-queso.jpg" alt="Cacahuate Queso">
+                <h3>Cacahuate Queso</h3>
+                <button onclick="agregarCarrito('Cacahuate Queso', 15)">Añadir al Carrito</button>
             </article>
 
             <article class="producto" data-name="Churritos" data-category="botanas" data-price="12">
@@ -244,7 +259,7 @@
                 <strong id="subtotal">$0.00</strong>
             </div>
             <div>
-                <span>Shopping Cart</span>
+                <span>Envío / servicio</span>
                 <strong>$0.00</strong>
             </div>
             <div class="total">
@@ -257,8 +272,8 @@
             <h3>Order Summary for<br>[Customer Name]</h3>
 
             <div class="acciones">
-                <button>☆<br>Rate Servicio</button>
-                <button>💬<br>Comentarios</button>
+                <button onclick="abrirModal('calificacion')">☆<br>Rate Servicio</button>
+                <button onclick="abrirModal('comentarios')">💬<br>Comentarios</button>
             </div>
 
             <button class="btn-pagar" onclick="enviarWhatsApp()">Pagar Ahora</button>
@@ -266,6 +281,14 @@
 
     </aside>
 
+</div>
+
+<!-- MODAL GENERAL -->
+<div class="modal" id="modal">
+    <div class="modal-contenido">
+        <button class="cerrar-modal" onclick="cerrarModal()">×</button>
+        <div id="modalBody"></div>
+    </div>
 </div>
 
 <script src="js/app.js"></script>

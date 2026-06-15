@@ -502,3 +502,136 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
     }
 }
+
+/* ==============================
+   MODAL FUNCIONAL
+   ============================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+.modal.activo {
+    display: flex;
+}
+
+.modal-contenido {
+    width: min(520px, 95%);
+    background: linear-gradient(180deg, rgba(18, 28, 30, 0.98), rgba(5, 13, 14, 0.98));
+    border: 1px solid var(--border-glow);
+    border-radius: 18px;
+    box-shadow: 0 0 35px rgba(184, 247, 255, 0.35);
+    padding: 24px;
+    position: relative;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.modal-contenido h2 {
+    margin-bottom: 14px;
+    color: var(--accent);
+}
+
+.modal-contenido p {
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.modal-form {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.modal-form input,
+.modal-form textarea,
+.modal-form select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--text-main);
+    outline: none;
+}
+
+.modal-form select option {
+    background: #071113;
+    color: #ffffff;
+}
+
+.modal-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-form button,
+.modal-btn {
+    background: linear-gradient(135deg, #ffffff, #b8f7ff);
+    color: #061113;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.modal-form button:hover,
+.modal-btn:hover {
+    transform: scale(1.02);
+}
+
+.estrellas {
+    display: flex;
+    gap: 8px;
+    font-size: 2rem;
+    margin: 14px 0;
+}
+
+.estrellas span {
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: 0.2s ease;
+}
+
+.estrellas span:hover,
+.estrellas span.activa {
+    color: #ffd166;
+    text-shadow: 0 0 12px rgba(255, 209, 102, 0.8);
+}
+
+.resultado-cliente {
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(184, 247, 255, 0.08);
+    border: 1px solid var(--border-soft);
+}
+
+.resultado-cliente div {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    color: var(--text-muted);
+}
+
+.resultado-cliente strong {
+    color: var(--text-main);
+}
