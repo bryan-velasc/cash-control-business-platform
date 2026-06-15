@@ -530,6 +530,76 @@ Ejemplos de evidencias:
 
 ---
 
+---
+
+## PRU-007: Verificar botones funcionales del dashboard web
+
+### ID de prueba
+
+PRU-007
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Página web / Interactividad
+
+### Función probada
+
+Verificar que los botones principales del dashboard web tengan comportamiento funcional mediante JavaScript.
+
+### Archivos modificados
+
+- `web-dulces/index.html`
+- `web-dulces/css/estilos.css`
+- `web-dulces/js/app.js`
+
+### Botones probados
+
+- Products.
+- Catalog.
+- Clientes.
+- Fidelidad.
+- Pagos.
+- Rate Servicio.
+- Comentarios.
+- Pagar Ahora.
+- Añadir al Carrito.
+- Vaciar carrito.
+
+### Pasos realizados
+
+1. Se abrió la página localmente desde `web-dulces/index.html`.
+2. Se seleccionó el botón `Products`.
+3. Se seleccionó el botón `Catalog`.
+4. Se abrió el modal de `Clientes`.
+5. Se abrió el modal de `Fidelidad`.
+6. Se abrió el modal de `Pagos`.
+7. Se abrió el modal de `Rate Servicio`.
+8. Se seleccionó una calificación con estrellas.
+9. Se abrió el modal de `Comentarios`.
+10. Se agregaron productos al carrito.
+11. Se verificó el total del carrito.
+12. Se probó el botón `Pagar Ahora`.
+
+### Resultado esperado
+
+Los botones deben responder correctamente sin recargar la página ni romper el diseño.
+
+### Resultado obtenido
+
+Los botones principales quedaron funcionales mediante JavaScript. Las secciones de clientes, fidelidad, pagos, calificación y comentarios funcionan mediante ventanas modales. El carrito permite agregar productos, calcular totales, generar puntos de fidelidad y enviar el pedido por WhatsApp.
+
+### Estado
+
+Completado.
+
+### Observaciones
+
+Las funciones actuales son demostrativas. En una fase posterior se conectarán con FastAPI y Cash Control para usar datos reales de clientes, pagos, fidelidad y ventas.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
