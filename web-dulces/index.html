@@ -8,6 +8,18 @@
 </head>
 <body>
 
+<!-- HEADER MÓVIL -->
+<header class="mobile-header">
+    <div>
+        <strong>Velasco Dulces</strong>
+        <span>Catálogo rápido</span>
+    </div>
+
+    <button onclick="abrirCarritoMobile()">
+        🛒 <span id="cartCountMobile">0</span>
+    </button>
+</header>
+
 <div class="app-layout">
 
     <!-- PANEL IZQUIERDO -->
@@ -68,7 +80,7 @@
             </div>
 
             <div class="mini-producto">
-                <img src="img/dulces/panditas-enchilados.jpg" alt="Panditas">
+                <img src="img/dulces/panditas-enchilados.jpg" alt="Panditas Enchilados">
                 <div>
                     <h3>Panditas Enchilados</h3>
                     <p>Dulce enchilado</p>
@@ -122,121 +134,7 @@
         </div>
 
         <section class="grid-productos" id="productGrid">
-
-            <article class="producto" data-name="Cacahuate Japonés" data-category="botanas" data-price="15">
-                <img src="img/dulces/cacahuate-japones.jpg" alt="Cacahuate Japonés">
-                <h3>Cacahuate Japonés</h3>
-                <button onclick="agregarCarrito('Cacahuate Japonés', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Cacahuate Habanero" data-category="botanas" data-price="15">
-                <img src="img/dulces/cacahuate-habanero.jpg" alt="Cacahuate Habanero">
-                <h3>Cacahuate Habanero</h3>
-                <button onclick="agregarCarrito('Cacahuate Habanero', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Cacahuate Hotnug" data-category="botanas" data-price="15">
-                <img src="img/dulces/cacahuate-hotnug.jpg" alt="Cacahuate Hotnug">
-                <h3>Cacahuate Hotnug</h3>
-                <button onclick="agregarCarrito('Cacahuate Hotnug', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Cacahuate Queso" data-category="botanas" data-price="15">
-                <img src="img/dulces/cacahuate-queso.jpg" alt="Cacahuate Queso">
-                <h3>Cacahuate Queso</h3>
-                <button onclick="agregarCarrito('Cacahuate Queso', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Churritos" data-category="botanas" data-price="12">
-                <img src="img/dulces/churritos.jpg" alt="Churritos">
-                <h3>Churritos</h3>
-                <button onclick="agregarCarrito('Churritos', 12)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Halls" data-category="dulces" data-price="15">
-                <img src="img/dulces/halls.jpg" alt="Halls">
-                <h3>Halls</h3>
-                <button onclick="agregarCarrito('Halls', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Pelón Pelorico" data-category="dulces" data-price="10">
-                <img src="img/dulces/pelon-pelorico.jpg" alt="Pelón Pelorico">
-                <h3>Pelón Pelorico</h3>
-                <button onclick="agregarCarrito('Pelón Pelorico', 10)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Mazapán" data-category="dulces" data-price="6">
-                <img src="img/dulces/mazapan.jpg" alt="Mazapán">
-                <h3>Mazapán</h3>
-                <button onclick="agregarCarrito('Mazapán', 6)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Chicles" data-category="dulces" data-price="2">
-                <img src="img/dulces/chicles.jpg" alt="Chicles">
-                <h3>Chicles</h3>
-                <button onclick="agregarCarrito('Chicles', 2)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Panditas Enchilados" data-category="dulces" data-price="10">
-                <img src="img/dulces/panditas-enchilados.jpg" alt="Panditas Enchilados">
-                <h3>Panditas Enchilados</h3>
-                <button onclick="agregarCarrito('Panditas Enchilados', 10)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Gusanitos" data-category="dulces" data-price="10">
-                <img src="img/dulces/gusanitos.jpg" alt="Gusanitos">
-                <h3>Gusanitos</h3>
-                <button onclick="agregarCarrito('Gusanitos', 10)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Paleta Bombachile" data-category="dulces" data-price="5">
-                <img src="img/dulces/bombachile.jpg" alt="Paleta Bombachile">
-                <h3>Paleta Bombachile</h3>
-                <button onclick="agregarCarrito('Paleta Bombachile', 5)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Bombón de Chocolate" data-category="dulces" data-price="15">
-                <img src="img/dulces/bombon.jpg" alt="Bombón de Chocolate">
-                <h3>Bombón de Chocolate</h3>
-                <button onclick="agregarCarrito('Bombón de Chocolate', 15)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Galletas Maravilla" data-category="galletas" data-price="26">
-                <img src="img/dulces/maravillas.jpg" alt="Galletas Maravilla">
-                <h3>Galletas Maravilla</h3>
-                <button onclick="agregarCarrito('Galletas Maravilla', 26)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Galletas Florentinas" data-category="galletas" data-price="26">
-                <img src="img/dulces/florentinas.jpg" alt="Galletas Florentinas">
-                <h3>Galletas Florentinas</h3>
-                <button onclick="agregarCarrito('Galletas Florentinas', 26)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Galletas Emperador" data-category="galletas" data-price="26">
-                <img src="img/dulces/emperador.jpg" alt="Galletas Emperador">
-                <h3>Galletas Emperador</h3>
-                <button onclick="agregarCarrito('Galletas Emperador', 26)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Galletas Chokis" data-category="galletas" data-price="26">
-                <img src="img/dulces/chokis.jpg" alt="Galletas Chokis">
-                <h3>Galletas Chokis</h3>
-                <button onclick="agregarCarrito('Galletas Chokis', 26)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Chocomilk" data-category="bebidas" data-price="210">
-                <img src="img/chocomiles/chocomilk.jpg" alt="Chocomilk">
-                <h3>Chocomilk</h3>
-                <button onclick="agregarCarrito('Chocomilk', 210)">Añadir al Carrito</button>
-            </article>
-
-            <article class="producto" data-name="Calcetose" data-category="bebidas" data-price="230">
-                <img src="img/chocomiles/calcetose.jpg" alt="Calcetose">
-                <h3>Calcetose</h3>
-                <button onclick="agregarCarrito('Calcetose', 230)">Añadir al Carrito</button>
-            </article>
-
+            <!-- Los productos se cargan dinámicamente desde js/productos.js -->
         </section>
 
     </main>
@@ -245,13 +143,13 @@
     <aside class="carrito-panel" id="carritoPanel">
 
         <div class="carrito-header">
-    <h2>Shopping Cart</h2>
+            <h2>Shopping Cart</h2>
 
-    <div class="carrito-botones">
-        <button onclick="vaciarCarrito()">🗑</button>
-        <button class="cerrar-carrito-mobile" onclick="cerrarCarritoMobile()">×</button>
-    </div>
-</div>
+            <div class="carrito-botones">
+                <button onclick="vaciarCarrito()">🗑</button>
+                <button class="cerrar-carrito-mobile" onclick="cerrarCarritoMobile()">×</button>
+            </div>
+        </div>
 
         <div id="cartItems" class="cart-items">
             <p class="carrito-vacio">Tu carrito está vacío</p>
@@ -262,10 +160,12 @@
                 <span>Subtotal</span>
                 <strong id="subtotal">$0.00</strong>
             </div>
+
             <div>
                 <span>Envío / servicio</span>
                 <strong>$0.00</strong>
             </div>
+
             <div class="total">
                 <span>Total</span>
                 <strong id="total">$0.00</strong>
@@ -287,12 +187,32 @@
 
 </div>
 
+<!-- MENÚ INFERIOR MÓVIL -->
 <nav class="mobile-nav">
-    <button onclick="navegarMobile('productos')">🏠<span>Inicio</span></button>
-    <button onclick="navegarMobile('catalogo')">🍬<span>Catálogo</span></button>
-    <button onclick="abrirModal('clientes')">👤<span>Cliente</span></button>
-    <button onclick="abrirModal('fidelidad')">⭐<span>Puntos</span></button>
-    <button onclick="abrirModal('pagos')">💳<span>Pagos</span></button>
+    <button onclick="navegarMobile('productos')">
+        🏠
+        <span>Inicio</span>
+    </button>
+
+    <button onclick="navegarMobile('catalogo')">
+        🍬
+        <span>Catálogo</span>
+    </button>
+
+    <button onclick="abrirModal('clientes')">
+        👤
+        <span>Cliente</span>
+    </button>
+
+    <button onclick="abrirModal('fidelidad')">
+        ⭐
+        <span>Puntos</span>
+    </button>
+
+    <button onclick="abrirModal('pagos')">
+        💳
+        <span>Pagos</span>
+    </button>
 </nav>
 
 <!-- MODAL GENERAL -->
@@ -303,17 +223,8 @@
     </div>
 </div>
 
+<script src="js/productos.js"></script>
 <script src="js/app.js"></script>
+
 </body>
-
-<header class="mobile-header">
-    <div>
-        <strong>Velasco Dulces</strong>
-        <span>Catálogo rápido</span>
-    </div>
-
-    <button onclick="abrirCarritoMobile()">
-        🛒 <span id="cartCountMobile">0</span>
-    </button>
-</header>
 </html>
