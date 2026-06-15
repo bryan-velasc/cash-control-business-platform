@@ -519,6 +519,59 @@ Los modales permiten validar la experiencia visual y funcional antes de conectar
 
 La página ahora cuenta con botones funcionales, modales interactivos y una estructura preparada para integrarse con Cash Control.
 
+---
+
+# ADR-012: Adaptar dashboard web a versión móvil
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+El diseño dashboard oscuro funciona bien en computadora, pero la página también debe poder usarse desde celulares, ya que los clientes probablemente consultarán productos y pedidos desde el teléfono.
+
+## Decisión
+
+Se decidió implementar una versión responsive con encabezado móvil, menú inferior, catálogo adaptado y carrito desplegable.
+
+## Alternativas consideradas
+
+- Mantener solo diseño de escritorio.
+- Crear una página móvil separada.
+- Migrar a framework frontend.
+- Reducir funciones en celular.
+
+## Motivo de la decisión
+
+Una tienda web debe funcionar correctamente en celular. Adaptar el diseño actual permite mantener una sola base de código y mejorar la experiencia del cliente sin aumentar demasiado la complejidad.
+
+## Ventajas
+
+- Mejor experiencia en celular.
+- No requiere framework externo.
+- Mantiene el diseño dashboard.
+- Permite comprar desde móvil.
+- Mejora presentación profesional del proyecto.
+- Prepara el sitio para clientes reales.
+
+## Riesgos
+
+- El diseño puede requerir ajustes adicionales en pantallas muy pequeñas.
+- El carrito móvil debe probarse bien para evitar errores de interacción.
+- El frontend sigue siendo demostrativo hasta conectar backend.
+
+## Controles
+
+- Probar con modo responsive del navegador.
+- Mantener funciones críticas fuera del frontend.
+- Documentar pruebas visuales.
+- Ajustar CSS por media queries.
+
+## Resultado
+
+La página web ahora cuenta con una experiencia móvil más usable, incluyendo navegación inferior, carrito lateral y catálogo adaptado a pantallas pequeñas.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
