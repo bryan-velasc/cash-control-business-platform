@@ -1,0 +1,2 @@
+# cash-control-business-platform
+plataform_of_cash_control_for_inventary_candy_and_securiy
