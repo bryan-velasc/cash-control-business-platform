@@ -437,6 +437,49 @@ Estado:
 
 ---
 
+---
+
+## ERR-006: Ruta incorrecta del archivo CSS
+
+### ID del error
+
+ERR-006
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Página web / CSS
+
+### Entorno
+
+Página web alojada en Netlify e importada al repositorio local.
+
+### Descripción
+
+El archivo `index.html` tenía enlazado el archivo de estilos como `estilos.css`, pero el archivo real se encontraba dentro de la carpeta `css/`.
+
+### Síntoma
+
+La página podía cargar sin aplicar correctamente los estilos visuales.
+
+### Causa probable
+
+La estructura de carpetas fue reorganizada, pero la ruta del archivo CSS no fue actualizada en el HTML.
+
+### Impacto
+
+Medio. Afectaba directamente la presentación visual de la página.
+
+### Solución aplicada
+
+Se modificó la ruta:
+
+```html
+<link rel="stylesheet" href="estilos.css">
+
 ## Conclusión
 
 La bitácora de errores permite mantener control técnico sobre el desarrollo del proyecto. Cada problema registrado representa una oportunidad de mejora y una evidencia de aprendizaje.
