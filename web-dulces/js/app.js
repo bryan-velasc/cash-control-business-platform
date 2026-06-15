@@ -30,6 +30,7 @@ function actualizarCarrito() {
     const loyaltyPoints = document.getElementById("loyaltyPoints");
     const pointsView = document.getElementById("pointsView");
     const comprasCliente = document.getElementById("comprasCliente");
+    const cartCountMobile = document.getElementById("cartCountMobile");
 
     cartItems.innerHTML = "";
 
@@ -64,6 +65,9 @@ function actualizarCarrito() {
     loyaltyPoints.textContent = puntos;
     pointsView.textContent = `${puntos} points`;
     comprasCliente.textContent = totalProductos;
+    if (cartCountMobile) {
+    cartCountMobile.textContent = totalProductos;
+}
 }
 
 function vaciarCarrito() {
@@ -417,4 +421,52 @@ if (modal) {
             cerrarModal();
         }
     });
+}
+
+/* ==============================
+   FUNCIONES MOBILE
+   ============================== */
+
+function abrirCarritoMobile() {
+    const carritoPanel = document.getElementById("carritoPanel");
+
+    if (carritoPanel) {
+        carritoPanel.classList.add("carrito-abierto");
+    }
+}
+
+function cerrarCarritoMobile() {
+    const carritoPanel = document.getElementById("carritoPanel");
+
+    if (carritoPanel) {
+        carritoPanel.classList.remove("carrito-abierto");
+    }
+}
+
+function navegarMobile(seccion) {
+    cerrarCarritoMobile();
+
+    if (seccion === "productos" || seccion === "catalogo") {
+        categoryFilter.value = "all";
+        searchInput.value = "";
+
+        chips.forEach(c => c.classList.remove("activo"));
+
+        const chipAll = document.querySelector('.chip[data-category="all"]');
+
+        if (chipAll) {
+            chipAll.classList.add("activo");
+        }
+
+        filtrarProductos();
+
+        const contenido = document.querySelector(".contenido");
+
+        if (contenido) {
+            contenido.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    }
 }

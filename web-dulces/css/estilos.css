@@ -635,3 +635,234 @@ body {
 .resultado-cliente strong {
     color: var(--text-main);
 }
+
+/* ==============================
+   RESPONSIVE MOBILE DASHBOARD
+   ============================== */
+
+.mobile-header,
+.mobile-nav,
+.cerrar-carrito-mobile {
+    display: none;
+}
+
+.carrito-botones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Ajustes para tablet */
+@media (max-width: 1200px) {
+    body {
+        overflow: auto;
+    }
+
+    .app-layout {
+        height: auto;
+        min-height: 100vh;
+        grid-template-columns: 180px 1fr 300px;
+        padding: 18px;
+    }
+
+    .panel-cliente {
+        display: none;
+    }
+
+    .grid-productos {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+}
+
+/* Ajustes para celular */
+@media (max-width: 900px) {
+    body {
+        overflow-x: hidden;
+        padding-top: 72px;
+        padding-bottom: 78px;
+    }
+
+    .mobile-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        padding: 10px 14px;
+        background: rgba(5, 13, 14, 0.96);
+        border-bottom: 1px solid var(--border-soft);
+        box-shadow: 0 0 22px rgba(184, 247, 255, 0.18);
+        backdrop-filter: blur(14px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 800;
+    }
+
+    .mobile-header strong {
+        display: block;
+        font-size: 1rem;
+        color: var(--text-main);
+    }
+
+    .mobile-header span {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .mobile-header button {
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-main);
+        border-radius: 999px;
+        padding: 9px 13px;
+        font-weight: 900;
+        cursor: pointer;
+    }
+
+    .app-layout {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .sidebar,
+    .panel-cliente {
+        display: none;
+    }
+
+    .contenido {
+        min-height: calc(100vh - 150px);
+        border-radius: 18px;
+        padding: 14px;
+        overflow: visible;
+    }
+
+    .topbar {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .topbar select {
+        width: 100%;
+        height: 44px;
+    }
+
+    .chips {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+    }
+
+    .chip {
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+
+    .grid-productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .producto img {
+        height: 118px;
+    }
+
+    .producto h3 {
+        font-size: 0.82rem;
+        min-height: 42px;
+    }
+
+    .producto button {
+        font-size: 0.72rem;
+        padding: 8px 5px;
+    }
+
+    .carrito-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(92vw, 360px);
+        height: 100vh;
+        z-index: 1000;
+        border-radius: 18px 0 0 18px;
+        transform: translateX(110%);
+        transition: transform 0.28s ease;
+        background: linear-gradient(180deg, rgba(18, 28, 30, 0.98), rgba(5, 13, 14, 0.98));
+    }
+
+    .carrito-panel.carrito-abierto {
+        transform: translateX(0);
+    }
+
+    .cerrar-carrito-mobile {
+        display: inline-block;
+        font-size: 1.8rem;
+    }
+
+    .mobile-nav {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        height: 62px;
+        background: rgba(5, 13, 14, 0.96);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        box-shadow: 0 0 25px rgba(184, 247, 255, 0.2);
+        backdrop-filter: blur(16px);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        z-index: 850;
+        overflow: hidden;
+    }
+
+    .mobile-nav button {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .mobile-nav button span {
+        font-size: 0.65rem;
+        margin-top: 2px;
+    }
+
+    .mobile-nav button:hover {
+        color: var(--accent);
+        background: rgba(184, 247, 255, 0.08);
+    }
+
+    .modal-contenido {
+        max-height: 86vh;
+        overflow-y: auto;
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 420px) {
+    .grid-productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .producto img {
+        height: 105px;
+    }
+
+    .producto h3 {
+        font-size: 0.76rem;
+    }
+
+    .btn-pagar {
+        font-size: 1.1rem;
+        padding: 15px;
+    }
+}

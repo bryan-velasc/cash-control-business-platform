@@ -242,12 +242,16 @@
     </main>
 
     <!-- CARRITO DERECHO -->
-    <aside class="carrito-panel">
+    <aside class="carrito-panel" id="carritoPanel">
 
         <div class="carrito-header">
-            <h2>Shopping Cart</h2>
-            <button onclick="vaciarCarrito()">🗑</button>
-        </div>
+    <h2>Shopping Cart</h2>
+
+    <div class="carrito-botones">
+        <button onclick="vaciarCarrito()">🗑</button>
+        <button class="cerrar-carrito-mobile" onclick="cerrarCarritoMobile()">×</button>
+    </div>
+</div>
 
         <div id="cartItems" class="cart-items">
             <p class="carrito-vacio">Tu carrito está vacío</p>
@@ -283,6 +287,14 @@
 
 </div>
 
+<nav class="mobile-nav">
+    <button onclick="navegarMobile('productos')">🏠<span>Inicio</span></button>
+    <button onclick="navegarMobile('catalogo')">🍬<span>Catálogo</span></button>
+    <button onclick="abrirModal('clientes')">👤<span>Cliente</span></button>
+    <button onclick="abrirModal('fidelidad')">⭐<span>Puntos</span></button>
+    <button onclick="abrirModal('pagos')">💳<span>Pagos</span></button>
+</nav>
+
 <!-- MODAL GENERAL -->
 <div class="modal" id="modal">
     <div class="modal-contenido">
@@ -293,4 +305,15 @@
 
 <script src="js/app.js"></script>
 </body>
+
+<header class="mobile-header">
+    <div>
+        <strong>Velasco Dulces</strong>
+        <span>Catálogo rápido</span>
+    </div>
+
+    <button onclick="abrirCarritoMobile()">
+        🛒 <span id="cartCountMobile">0</span>
+    </button>
+</header>
 </html>
