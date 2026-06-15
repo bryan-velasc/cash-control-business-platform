@@ -2,6 +2,32 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.2.1] - 2026-06-14
+
+### Agregado
+
+- Funcionalidad para botones del menú lateral.
+- Modal de consulta de clientes.
+- Modal de programa de fidelidad.
+- Modal de métodos de pago.
+- Modal de comentarios.
+- Modal de calificación con estrellas.
+- Funciones demo para futuras conexiones con Cash Control.
+
+### Mejorado
+
+- El botón `Products` y `Catalog` reinician filtros y buscador.
+- El carrito actualiza compras, puntos y total.
+- El botón `Pagar Ahora` genera pedido por WhatsApp.
+
+### Pendiente
+
+- Conectar clientes reales desde backend.
+- Conectar fidelidad real desde Cash Control.
+- Conectar pagos reales.
+- Guardar comentarios en base de datos.
+- Guardar calificaciones en base de datos.
+
 ## [0.1.1] - 2026-06-14
 
 ### Agregado
