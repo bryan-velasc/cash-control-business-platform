@@ -466,6 +466,59 @@ Documentar desde el inicio permite mantener orden, justificar decisiones y const
 
 ---
 
+---
+
+# ADR-011: Usar modales para funciones iniciales del dashboard web
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+El dashboard web necesitaba botones funcionales para clientes, fidelidad, pagos, comentarios y calificación. Sin embargo, todavía no se ha conectado la página con FastAPI ni con Cash Control.
+
+## Decisión
+
+Se decidió implementar ventanas modales con JavaScript para simular las funciones principales sin depender todavía del backend.
+
+## Alternativas consideradas
+
+- Crear páginas separadas para cada sección.
+- Conectar inmediatamente con backend.
+- Dejar los botones sin función.
+- Usar una librería externa de interfaz.
+
+## Motivo de la decisión
+
+Los modales permiten validar la experiencia visual y funcional antes de conectar datos reales. Además, mantienen la página ligera usando HTML, CSS y JavaScript puro.
+
+## Ventajas
+
+- No requiere frameworks externos.
+- Mantiene buen rendimiento.
+- Permite probar la experiencia del usuario.
+- Prepara la estructura para conexión futura.
+- Evita modificar todavía el backend.
+- Reduce riesgo de romper la página.
+
+## Riesgos
+
+- Las funciones actuales son demostrativas.
+- Los datos no se guardan todavía en base de datos.
+- El frontend no debe manejar datos sensibles reales sin backend.
+
+## Controles
+
+- Documentar que las funciones son demo.
+- No guardar datos sensibles reales en el frontend.
+- Conectar operaciones críticas posteriormente con FastAPI.
+- Validar clientes, pagos y fidelidad desde backend en futuras fases.
+
+## Resultado
+
+La página ahora cuenta con botones funcionales, modales interactivos y una estructura preparada para integrarse con Cash Control.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
