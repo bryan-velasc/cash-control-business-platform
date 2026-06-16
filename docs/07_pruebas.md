@@ -666,6 +666,63 @@ Completado.
 
 El diseño móvil mantiene la estética dashboard oscuro, pero adapta la navegación para que sea más usable en celulares.
 
+---
+
+## PRU-009: Verificar catálogo dinámico con JavaScript
+
+### ID de prueba
+
+PRU-009
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Página web / Catálogo dinámico
+
+### Función probada
+
+Verificar que los productos se carguen dinámicamente desde el archivo `js/productos.js` y que el carrito funcione con la nueva estructura.
+
+### Archivos modificados
+
+- `web-dulces/index.html`
+- `web-dulces/js/productos.js`
+- `web-dulces/js/app.js`
+- `web-dulces/css/estilos.css`
+
+### Elementos probados
+
+- Carga dinámica de productos.
+- Visualización de precio.
+- Visualización de stock.
+- Producto agotado.
+- Buscador.
+- Filtros por categoría.
+- Agregar producto al carrito.
+- Evitar agregar productos sin stock.
+- Eliminar productos del carrito.
+- Calcular subtotal y total.
+- Generar pedido por WhatsApp.
+
+### Resultado esperado
+
+Los productos deben mostrarse automáticamente desde JavaScript sin estar escritos directamente en el HTML.
+
+### Resultado obtenido
+
+El catálogo se cargó correctamente desde `js/productos.js`. Los productos muestran nombre, imagen, precio y stock. El producto sin stock aparece como agotado y no puede agregarse al carrito. El buscador, filtros, carrito y WhatsApp funcionan correctamente.
+
+### Estado
+
+Completado.
+
+### Observaciones
+
+Esta estructura prepara el proyecto para que en una fase posterior los productos se carguen desde el backend FastAPI y sean administrados desde Cash Control.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
