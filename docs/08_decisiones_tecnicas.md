@@ -572,6 +572,61 @@ Una tienda web debe funcionar correctamente en celular. Adaptar el diseño actua
 
 La página web ahora cuenta con una experiencia móvil más usable, incluyendo navegación inferior, carrito lateral y catálogo adaptado a pantallas pequeñas.
 
+---
+
+# ADR-013: Migrar catálogo estático a catálogo dinámico con JavaScript
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+La página web tenía los productos escritos directamente dentro del archivo `index.html`. Esto hacía difícil mantener el catálogo, agregar stock, aplicar filtros y preparar la conexión futura con Cash Control.
+
+## Decisión
+
+Se decidió mover la información de productos a un archivo separado llamado `js/productos.js` y renderizar el catálogo desde `js/app.js`.
+
+## Alternativas consideradas
+
+- Mantener los productos escritos en HTML.
+- Conectar directamente con FastAPI en esta fase.
+- Migrar a React.
+- Usar una base de datos desde el inicio.
+
+## Motivo de la decisión
+
+Antes de conectar el backend, era necesario separar la estructura visual del catálogo respecto a los datos de productos. Esto permite preparar el flujo para una futura conexión con FastAPI sin hacer una migración brusca.
+
+## Ventajas
+
+- Código más ordenado.
+- Productos más fáciles de modificar.
+- Preparación para backend.
+- Mejor control de stock.
+- Menos repetición de HTML.
+- Filtros y buscador más fáciles de mantener.
+- Carrito más estructurado.
+
+## Riesgos
+
+- Los datos siguen estando en frontend.
+- El stock todavía no es real.
+- Un usuario podría modificar el JavaScript desde el navegador.
+- No debe usarse para operaciones críticas sin backend.
+
+## Controles
+
+- Documentar que `productos.js` es temporal.
+- Mantener operaciones críticas para una fase posterior en FastAPI.
+- No manejar datos sensibles en este archivo.
+- Validar precios, stock y pagos desde backend cuando se conecte Cash Control.
+
+## Resultado
+
+El catálogo ahora se carga dinámicamente desde JavaScript y queda preparado para integrarse con FastAPI y Cash Control.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
