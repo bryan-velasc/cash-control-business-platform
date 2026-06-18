@@ -2,6 +2,37 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.4.0] - 2026-06-14
+
+### Agregado
+
+- Backend inicial con FastAPI.
+- Endpoint raíz `GET /`.
+- Endpoint de salud `GET /health`.
+- Endpoint público de productos `GET /products/public`.
+- Endpoint administrativo demo `GET /products/admin`.
+- Endpoint para consultar producto por ID `GET /products/{product_id}`.
+- Modelo público de producto.
+- Modelo administrativo de producto.
+- Base temporal de productos en backend.
+- Configuración inicial de CORS.
+- Archivo `requirements.txt`.
+- Archivo `.env.example`.
+
+### Mejorado
+
+- Se separó la información pública de productos respecto a la información administrativa.
+- La página web queda preparada para consumir productos desde backend.
+- Se agregó documentación automática mediante Swagger en `/docs`.
+
+### Pendiente
+
+- Conectar la página web con `GET /products/public`.
+- Sustituir `js/productos.js` por consumo real de API.
+- Proteger endpoint `/products/admin`.
+- Conectar productos con MongoDB Atlas.
+- Administrar productos desde Cash Control.
+
 ## [0.3.0] - 2026-06-14
 
 ### Agregado
