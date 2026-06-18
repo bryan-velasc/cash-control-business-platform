@@ -2,6 +2,32 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.3.0] - 2026-06-14
+
+### Agregado
+
+- Archivo `js/productos.js` como base temporal de productos.
+- Carga dinámica del catálogo desde JavaScript.
+- Visualización de precio por producto.
+- Visualización de stock por producto.
+- Estado de producto agotado.
+- Botón para eliminar productos del carrito.
+- Mensaje cuando no hay productos encontrados.
+
+### Modificado
+
+- El archivo `index.html` dejó de contener productos escritos manualmente.
+- El catálogo ahora se renderiza desde `app.js`.
+- El carrito ahora trabaja con IDs de productos.
+- Los filtros y buscador ahora usan la base temporal `PRODUCTOS`.
+
+### Pendiente
+
+- Conectar productos con FastAPI.
+- Administrar stock desde Cash Control.
+- Sustituir `js/productos.js` por datos reales del backend.
+- Descontar stock real al confirmar una venta.
+
 ## [0.2.2] - 2026-06-14
 
 ### Agregado
