@@ -627,6 +627,61 @@ Antes de conectar el backend, era necesario separar la estructura visual del cat
 
 El catálogo ahora se carga dinámicamente desde JavaScript y queda preparado para integrarse con FastAPI y Cash Control.
 
+---
+
+# ADR-014: Crear API inicial de productos con FastAPI
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+La página web ya cuenta con un catálogo dinámico cargado desde JavaScript, pero los datos todavía viven en el frontend. Para conectar la web con Cash Control, el siguiente paso era crear una API que entregara productos desde backend.
+
+## Decisión
+
+Se decidió crear un backend inicial con FastAPI y un endpoint público `GET /products/public` para entregar productos a la página web.
+
+## Alternativas consideradas
+
+- Mantener los productos solo en `js/productos.js`.
+- Conectar directamente la página con MongoDB.
+- Esperar hasta tener todo Cash Control integrado.
+- Usar otro framework backend.
+
+## Motivo de la decisión
+
+FastAPI ya forma parte de la arquitectura planeada de Cash Control. Crear primero un endpoint público permite avanzar de forma controlada sin conectar todavía datos sensibles ni base de datos real.
+
+## Ventajas
+
+- Separa frontend y backend.
+- Prepara integración con Cash Control.
+- Permite controlar qué datos son públicos.
+- Facilita pruebas con Swagger.
+- Mantiene estructura escalable.
+- Permite migrar posteriormente a MongoDB Atlas.
+
+## Riesgos
+
+- El endpoint administrativo todavía no está protegido.
+- La base de productos sigue siendo temporal.
+- CORS está abierto durante desarrollo.
+- Todavía no existe autenticación.
+
+## Controles
+
+- Documentar que `/products/admin` es solo demo.
+- No usar endpoint administrativo en producción sin autenticación.
+- No exponer precio de compra en `/products/public`.
+- Mover claves reales a variables de entorno.
+- Conectar MongoDB en una fase posterior.
+
+## Resultado
+
+Se creó una API funcional con FastAPI que permite consultar productos públicos desde `/products/public`.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
