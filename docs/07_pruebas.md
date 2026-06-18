@@ -723,6 +723,70 @@ Completado.
 
 Esta estructura prepara el proyecto para que en una fase posterior los productos se carguen desde el backend FastAPI y sean administrados desde Cash Control.
 
+---
+
+## PRU-010: Verificar API pública de productos
+
+### ID de prueba
+
+PRU-010
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Backend / Productos
+
+### Función probada
+
+Verificar que el backend FastAPI entregue productos públicos mediante el endpoint `/products/public`.
+
+### Archivos modificados
+
+- `backend/main.py`
+- `backend/requirements.txt`
+- `backend/.env.example`
+- `backend/app/routes/product_routes.py`
+- `backend/app/models/product_model.py`
+- `backend/app/data/products_seed.py`
+
+### Endpoints probados
+
+- `GET /`
+- `GET /health`
+- `GET /products/public`
+- `GET /products/admin`
+- `GET /products/{product_id}`
+- `GET /docs`
+
+### Pasos realizados
+
+1. Se creó entorno virtual en `backend/`.
+2. Se instalaron dependencias con `pip install -r requirements.txt`.
+3. Se ejecutó el backend con `uvicorn main:app --reload`.
+4. Se abrió `http://127.0.0.1:8000`.
+5. Se probó `http://127.0.0.1:8000/health`.
+6. Se probó `http://127.0.0.1:8000/products/public`.
+7. Se verificó la documentación automática en `http://127.0.0.1:8000/docs`.
+
+### Resultado esperado
+
+El endpoint `/products/public` debe devolver una lista de productos activos sin exponer información administrativa como precio de compra, proveedor o ganancia.
+
+### Resultado obtenido
+
+El backend respondió correctamente. El endpoint `/products/public` devolvió la lista de productos públicos con nombre, categoría, precio, imagen, stock y estado activo.
+
+### Estado
+
+Completado.
+
+### Observaciones
+
+El endpoint `/products/admin` todavía es demostrativo y deberá protegerse con autenticación antes de usarse en producción.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
