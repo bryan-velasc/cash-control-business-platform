@@ -931,6 +931,80 @@ Observaciones
 
 Este historial permitirá auditar entradas, salidas, ajustes, pérdidas, ventas manuales y correcciones de inventario desde Cash Control.
 
+PRU-015: Verificar módulo de clientes, fiados y abonos
+ID de prueba
+
+PRU-015
+
+Fecha
+
+20/06/2026
+
+Módulo
+
+Backend / Clientes / Fiados
+
+Función probada
+
+Verificar que el backend permita crear clientes, registrar fiados, recibir abonos y consultar el saldo pendiente del cliente.
+
+Archivos modificados
+backend/main.py
+backend/app/models/customer_model.py
+backend/app/models/credit_model.py
+backend/app/repositories/customer_repository.py
+backend/app/repositories/credit_repository.py
+backend/app/routes/customer_routes.py
+backend/app/routes/credit_routes.py
+Endpoints probados
+POST /customers/create
+GET /customers/admin
+GET /customers/{customer_id}
+GET /customers/{customer_id}/summary
+PUT /customers/update/{customer_id}
+DELETE /customers/delete/{customer_id}
+POST /credits/create
+GET /credits/admin
+GET /credits/{credit_id}
+GET /credits/customer/{customer_id}
+POST /credits/pay/{credit_id}
+GET /credits/payments/{credit_id}
+PUT /credits/update/{credit_id}
+DELETE /credits/cancel/{credit_id}
+Elementos probados
+Creación de cliente.
+Consulta de clientes.
+Creación de fiado asociado a cliente.
+Validación de cliente existente y activo.
+Registro de abono.
+Cálculo de monto pagado.
+Cálculo de saldo pendiente.
+Cambio de estado del fiado a parcial o pagado.
+Consulta de pagos por fiado.
+Resumen financiero del cliente.
+Protección de endpoints mediante x-admin-token.
+Resultado esperado
+
+El backend debe permitir administrar clientes y fiados, registrar pagos parciales o completos y calcular automáticamente el saldo pendiente.
+
+Resultado obtenido
+
+El flujo cliente, fiado y abono funcionó correctamente. Se pudo crear un cliente, registrar un fiado, aplicar un abono y consultar el resumen del cliente con total fiado, total pagado, saldo pendiente y créditos activos.
+
+Error encontrado y solución
+
+Durante la prueba de POST /credits/create se presentó un error interno del servidor al enviar fecha_limite.
+
+El problema se originó porque FastAPI convertía la fecha a tipo date, pero MongoDB requiere que se guarde en un formato compatible. La solución fue usar model_dump(mode="json") en las rutas de creación y actualización de fiados para serializar correctamente la fecha antes de enviarla al repositorio.
+
+Estado
+
+Completado.
+
+Observaciones
+
+Este módulo será la base para que Cash Control pueda manejar clientes, deudas, pagos semanales, historial de abonos y control de fiados desde la app Flutter.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.

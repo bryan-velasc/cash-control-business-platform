@@ -840,6 +840,56 @@ Resultado
 
 El backend ya puede registrar movimientos de inventario y mantener historial en MongoDB Atlas.
 
+# ADR-019: Crear módulo de clientes, fiados y abonos
+Estado
+
+Aceptada.
+
+Contexto
+
+El sistema ya contaba con productos, inventario y movimientos de stock, pero todavía no tenía control de clientes ni deudas. Para el negocio, una parte importante es manejar fiados, pagos semanales, saldo pendiente y clientes que compran a crédito.
+
+Decisión
+
+Se decidió crear un módulo backend para clientes, fiados y abonos usando MongoDB Atlas y endpoints protegidos con x-admin-token.
+
+Alternativas consideradas
+Registrar fiados manualmente en hojas de cálculo.
+Guardar deudas como notas dentro del cliente.
+Esperar hasta crear la app Flutter.
+Manejar pagos únicamente desde la web pública.
+Crear primero ventas sin módulo de clientes.
+Motivo de la decisión
+
+El control de fiados requiere trazabilidad. Es necesario saber quién debe, cuánto debe, cuánto ha abonado, cuándo debe pagar y cuál es el estado de cada deuda. Crear primero la API permite que después Flutter solo consuma endpoints ya probados.
+
+Ventajas
+Permite registrar clientes.
+Permite crear fiados asociados a clientes.
+Permite registrar abonos parciales.
+Calcula saldo pendiente automáticamente.
+Guarda historial de pagos.
+Permite consultar resumen financiero por cliente.
+Prepara la integración con Cash Control Flutter.
+Reduce errores de control manual.
+Riesgos
+Los datos de clientes son información sensible.
+Un token simple no reemplaza autenticación completa.
+Si se registra mal un abono, puede afectar el saldo.
+Todavía no hay recordatorios automáticos de pago.
+Todavía no hay roles por usuario.
+Controles
+Proteger endpoints con x-admin-token.
+No exponer clientes ni fiados en la web pública.
+Validar que el cliente exista antes de crear un fiado.
+Rechazar abonos mayores al saldo pendiente.
+Bloquear pagos en fiados pagados o cancelados.
+Registrar pagos en una colección separada.
+Implementar autenticación real antes de producción.
+Resultado
+
+El backend ya permite crear clientes, registrar fiados, aplicar abonos y consultar saldos pendientes desde MongoDB Atlas.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.

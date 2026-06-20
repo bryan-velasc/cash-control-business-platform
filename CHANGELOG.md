@@ -2,6 +2,53 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+[0.8.0] - 2026-06-20
+Agregado
+Modelo CustomerCreate.
+Modelo CustomerUpdate.
+Modelo CustomerAdmin.
+Modelo CustomerSummary.
+Modelo CreditCreate.
+Modelo CreditUpdate.
+Modelo CreditAdmin.
+Modelo CreditPaymentCreate.
+Modelo CreditPayment.
+Modelo CreditPaymentsResponse.
+Endpoint POST /customers/create.
+Endpoint GET /customers/admin.
+Endpoint GET /customers/{customer_id}.
+Endpoint GET /customers/{customer_id}/summary.
+Endpoint PUT /customers/update/{customer_id}.
+Endpoint DELETE /customers/delete/{customer_id}.
+Endpoint POST /credits/create.
+Endpoint GET /credits/admin.
+Endpoint GET /credits/{credit_id}.
+Endpoint GET /credits/customer/{customer_id}.
+Endpoint POST /credits/pay/{credit_id}.
+Endpoint GET /credits/payments/{credit_id}.
+Endpoint PUT /credits/update/{credit_id}.
+Endpoint DELETE /credits/cancel/{credit_id}.
+Colecciones customers, credits y credit_payments en MongoDB Atlas.
+Índices para clientes, fiados y pagos.
+Cálculo de saldo pendiente.
+Registro de abonos.
+Resumen financiero por cliente.
+Corregido
+Se corrigió error de serialización de fecha_limite en POST /credits/create.
+Se usó model_dump(mode="json") para convertir fechas a formato compatible antes de guardar en MongoDB.
+Seguridad
+Los endpoints de clientes y fiados requieren x-admin-token.
+Los datos de clientes y fiados quedan protegidos como información administrativa.
+El sistema evita registrar abonos mayores al saldo pendiente.
+Los fiados pagados o cancelados ya no aceptan nuevos pagos.
+Pendiente
+Conectar este módulo con la app Flutter.
+Crear pantalla de clientes en Cash Control.
+Crear pantalla de fiados y pagos.
+Crear recordatorios de pago por fecha límite.
+Enviar SMS o WhatsApp de recordatorio.
+Agregar autenticación real con usuarios y roles.
+
 [0.7.0] - 2026-06-14
 Agregado
 Modelo StockAdjustment.
