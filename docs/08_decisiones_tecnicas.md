@@ -736,6 +736,63 @@ Conectar primero la web con una API local permite probar el flujo completo de fr
 
 La página web ya puede consumir productos desde FastAPI mediante el endpoint `/products/public`.
 
+---
+
+# ADR-016: Conectar productos con MongoDB Atlas
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+El backend FastAPI ya entregaba productos mediante `/products/public`, pero los datos provenían de una lista temporal en código. Para acercar el proyecto a una arquitectura real, era necesario conectar la API con una base de datos persistente.
+
+## Decisión
+
+Se decidió conectar FastAPI con MongoDB Atlas y mover la lectura de productos a una colección llamada `products`.
+
+## Alternativas consideradas
+
+- Mantener productos en `products_seed.py`.
+- Guardar productos en archivos JSON.
+- Conectar primero Flutter antes de la base de datos.
+- Usar una base de datos local.
+- Usar SQL en lugar de MongoDB.
+
+## Motivo de la decisión
+
+MongoDB Atlas ya forma parte de la arquitectura planeada de Cash Control. Además, permite manejar productos, clientes, fiados, pagos, stock y reportes con documentos flexibles.
+
+## Ventajas
+
+- Datos persistentes.
+- Separación entre lógica de rutas y lógica de datos.
+- Mayor escalabilidad.
+- Preparación para administración desde Flutter.
+- Posibilidad de manejar inventario, clientes y pagos en la misma base.
+- Mejor aproximación a producción.
+
+## Riesgos
+
+- Las credenciales deben protegerse correctamente.
+- Una mala configuración de red puede exponer la base de datos.
+- El endpoint `/products/admin` aún no tiene autenticación.
+- CORS todavía está abierto en desarrollo.
+
+## Controles
+
+- Usar variables de entorno.
+- No subir `backend/.env` a GitHub.
+- Mantener solo `.env.example` como plantilla.
+- Limitar CORS antes de producción.
+- Proteger endpoints administrativos con autenticación.
+- Revisar permisos del usuario de MongoDB Atlas.
+
+## Resultado
+
+FastAPI ya puede conectarse a MongoDB Atlas y entregar productos desde la colección `products`.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
