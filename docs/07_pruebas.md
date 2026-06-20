@@ -787,6 +787,38 @@ Completado.
 
 El endpoint `/products/admin` todavía es demostrativo y deberá protegerse con autenticación antes de usarse en producción.
 
+---
+
+## PRU-011: Verificar conexión de página web con API de productos
+
+### ID de prueba
+
+PRU-011
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Página web / Backend / Productos
+
+### Función probada
+
+Verificar que la página web cargue productos desde el endpoint público `GET /products/public` del backend FastAPI.
+
+### Archivos modificados
+
+- `web-dulces/js/productos.js`
+- `web-dulces/js/app.js`
+- `backend/main.py`
+- `backend/app/routes/product_routes.py`
+
+### Endpoint utilizado
+
+```text
+http://127.0.0.1:8000/products/public
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
