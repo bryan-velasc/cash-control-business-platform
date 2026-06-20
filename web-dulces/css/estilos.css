@@ -866,3 +866,114 @@ body {
         padding: 15px;
     }
 }
+
+/* ==============================
+   PRODUCTOS DINÁMICOS
+   ============================== */
+
+.producto-precio {
+    text-align: center;
+    color: var(--accent-green);
+    font-size: 1.05rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.producto-stock {
+    display: block;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    margin-bottom: 6px;
+}
+
+.producto-agotado {
+    opacity: 0.45;
+}
+
+.producto-agotado button {
+    cursor: not-allowed;
+    background: rgba(255, 107, 107, 0.14);
+    color: var(--danger);
+}
+
+.badge-agotado {
+    display: inline-block;
+    margin: 6px auto;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255, 107, 107, 0.35);
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+/* ==============================
+   MEJORAS CATALOGO DINÁMICO
+   ============================== */
+
+.producto-precio {
+    text-align: center;
+    color: var(--accent-green);
+    font-size: 1.05rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.producto-stock {
+    display: block;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    margin-bottom: 6px;
+}
+
+.producto-agotado {
+    opacity: 0.45;
+}
+
+.producto-agotado button {
+    cursor: not-allowed;
+    background: rgba(255, 107, 107, 0.14);
+    color: var(--danger);
+}
+
+.badge-agotado {
+    display: block;
+    width: fit-content;
+    margin: 6px auto;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255, 107, 107, 0.35);
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.sin-productos {
+    grid-column: 1 / -1;
+    padding: 30px;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    color: var(--text-muted);
+}
+
+.cart-item-actions {
+    display: grid;
+    gap: 6px;
+    justify-items: end;
+}
+
+.cart-item-actions button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 107, 107, 0.12);
+    color: var(--danger);
+    cursor: pointer;
+}
