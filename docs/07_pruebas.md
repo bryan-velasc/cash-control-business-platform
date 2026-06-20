@@ -819,6 +819,62 @@ Verificar que la página web cargue productos desde el endpoint público `GET /p
 ```text
 http://127.0.0.1:8000/products/public
 
+---
+
+## PRU-012: Verificar conexión de FastAPI con MongoDB Atlas
+
+### ID de prueba
+
+PRU-012
+
+### Fecha
+
+14/06/2026
+
+### Módulo
+
+Backend / Base de datos / Productos
+
+### Función probada
+
+Verificar que el backend FastAPI se conecte correctamente con MongoDB Atlas y obtenga productos desde la colección `products`.
+
+### Archivos modificados
+
+- `backend/main.py`
+- `backend/requirements.txt`
+- `backend/.env.example`
+- `backend/app/database.py`
+- `backend/app/routes/product_routes.py`
+- `backend/app/repositories/product_repository.py`
+
+### Elementos probados
+
+- Lectura de variables de entorno.
+- Conexión a MongoDB Atlas.
+- Ping de base de datos.
+- Creación de índices.
+- Inserción inicial de productos si la colección está vacía.
+- Consulta pública de productos desde MongoDB.
+- Endpoint `/health`.
+- Endpoint `/products/public`.
+
+### Resultado esperado
+
+El backend debe iniciar correctamente, conectarse a MongoDB Atlas y devolver productos desde la colección `products`.
+
+### Resultado obtenido
+
+El backend se conectó correctamente con MongoDB Atlas. El endpoint `/health` respondió con estado saludable y el endpoint `/products/public` devolvió los productos desde la colección `products`.
+
+### Estado
+
+Completado.
+
+### Observaciones
+
+El archivo `backend/.env` contiene credenciales reales y no debe subirse a GitHub. Solo debe subirse `backend/.env.example`.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
