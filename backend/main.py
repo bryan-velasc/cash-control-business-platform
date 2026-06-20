@@ -1,12 +1,32 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import ping_database, close_database
 from app.routes.product_routes import router as product_router
+from app.repositories.product_repository import seed_products_if_empty
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await ping_database()
+    seed_result = await seed_products_if_empty()
+
+    print("MongoDB conectado correctamente")
+    print(f"Seed productos: {seed_result}")
+
+    yield
+
+    await close_database()
+    print("Conexión MongoDB cerrada")
+
 
 app = FastAPI(
     title="Cash Control Business Platform API",
     description="API para conectar la página web de dulces con Cash Control.",
-    version="0.1.0"
+    version="0.2.0",
+    lifespan=lifespan
 )
 
 origins = [
@@ -29,17 +49,20 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {
-        "message": "Cash Control Business Platform API funcionando",
+        "message": "Cash Control Business Platform API funcionando con MongoDB Atlas",
         "status": "ok",
-        "version": "0.1.0"
+        "version": "0.2.0"
     }
 
 
 @app.get("/health")
 async def health_check():
+    await ping_database()
+
     return {
         "status": "healthy",
-        "service": "products-api"
+        "service": "products-api",
+        "database": "mongodb-atlas"
     }
 
 

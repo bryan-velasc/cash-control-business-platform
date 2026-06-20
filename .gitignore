@@ -33,3 +33,6 @@ serviceAccountKey.json
 
 # Logs
 *.log
+# Environment files
+.env
+backend/.env
