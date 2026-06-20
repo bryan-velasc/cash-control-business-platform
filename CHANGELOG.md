@@ -2,6 +2,40 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.5.0] - 2026-06-14
+
+### Agregado
+
+- Conexión de FastAPI con MongoDB Atlas.
+- Archivo `backend/app/database.py` para manejar conexión a base de datos.
+- Repositorio `product_repository.py` para separar lógica de datos.
+- Creación de índices para productos.
+- Inserción inicial de productos si la colección está vacía.
+- Lectura de productos desde la colección `products`.
+- Uso de variables de entorno para credenciales.
+- Archivo `.env.example` actualizado con variables de MongoDB.
+
+### Modificado
+
+- El endpoint `/products/public` ahora obtiene productos desde MongoDB Atlas.
+- El endpoint `/products/admin` ahora obtiene productos desde MongoDB Atlas.
+- El endpoint `/health` ahora verifica conexión con la base de datos.
+- La API cambió de versión `0.1.0` a `0.2.0`.
+
+### Seguridad
+
+- Se protegió el archivo `backend/.env` mediante `.gitignore`.
+- Las credenciales reales no se suben a GitHub.
+- Se mantiene `backend/.env.example` como plantilla segura.
+
+### Pendiente
+
+- Proteger `/products/admin` con autenticación.
+- Conectar productos administrativos con la app Flutter.
+- Crear endpoints para crear, actualizar y eliminar productos.
+- Configurar CORS seguro para producción.
+- Desplegar backend en Render.
+
 ## [0.4.1] - 2026-06-14
 
 ### Agregado
