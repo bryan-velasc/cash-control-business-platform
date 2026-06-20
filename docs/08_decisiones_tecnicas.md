@@ -682,6 +682,60 @@ FastAPI ya forma parte de la arquitectura planeada de Cash Control. Crear primer
 
 Se creó una API funcional con FastAPI que permite consultar productos públicos desde `/products/public`.
 
+---
+
+# ADR-015: Conectar página web con API pública de productos
+
+## Estado
+
+Aceptada.
+
+## Contexto
+
+La página web ya tenía un catálogo dinámico con productos cargados desde `js/productos.js`. Sin embargo, para avanzar hacia la integración real con Cash Control, era necesario consumir productos desde el backend FastAPI.
+
+## Decisión
+
+Se decidió conectar la página web al endpoint local `GET /products/public` mediante `fetch` desde JavaScript.
+
+## Alternativas consideradas
+
+- Mantener productos solo en `js/productos.js`.
+- Conectar directamente con MongoDB.
+- Esperar hasta desplegar backend en Render.
+- Integrar primero la app Flutter.
+
+## Motivo de la decisión
+
+Conectar primero la web con una API local permite probar el flujo completo de frontend a backend sin afectar todavía la app Flutter ni la base de datos real.
+
+## Ventajas
+
+- Prueba real de comunicación frontend-backend.
+- Prepara la web para producción.
+- Permite separar datos del HTML.
+- Permite validar estructura del endpoint.
+- No afecta todavía la app Flutter.
+- Mantiene respaldo local si la API falla.
+
+## Riesgos
+
+- La URL actual solo funciona en local.
+- CORS está abierto durante desarrollo.
+- El endpoint aún usa datos temporales.
+- Si el backend está apagado, la web usa respaldo local.
+
+## Controles
+
+- Usar `js/productos.js` como respaldo temporal.
+- Documentar que la URL local debe cambiar en producción.
+- Configurar CORS limitado antes de desplegar.
+- No exponer datos administrativos en `/products/public`.
+
+## Resultado
+
+La página web ya puede consumir productos desde FastAPI mediante el endpoint `/products/public`.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
