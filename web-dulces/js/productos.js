@@ -1,4 +1,4 @@
-const PRODUCTOS = [
+let PRODUCTOS = [
     {
         id: 1,
         nombre: "Cacahuate Japonés",

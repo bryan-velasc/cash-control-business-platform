@@ -2,24 +2,166 @@ let carrito = [];
 let puntos = 0;
 let calificacionActual = 0;
 
+const API_PRODUCTOS_URL = "http://127.0.0.1:8000/products/public";
+
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const chips = document.querySelectorAll(".chip");
+const productGrid = document.getElementById("productGrid");
 
-function agregarCarrito(nombre, precio) {
-    const existente = carrito.find(item => item.nombre === nombre);
+/* ==============================
+   CARGA DE PRODUCTOS DESDE API
+   ============================== */
+
+async function cargarProductosDesdeAPI() {
+    try {
+        mostrarEstadoCarga("Cargando productos desde Cash Control API...");
+
+        const response = await fetch(API_PRODUCTOS_URL);
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        const productosApi = await response.json();
+
+        if (!Array.isArray(productosApi)) {
+            throw new Error("La API no devolvió una lista válida de productos");
+        }
+
+        PRODUCTOS = productosApi;
+
+        renderizarProductos(PRODUCTOS);
+        actualizarCarrito();
+
+        console.log("Productos cargados desde API:", PRODUCTOS);
+    } catch (error) {
+        console.error("No se pudo conectar con la API. Usando productos locales.", error);
+
+        renderizarProductos(PRODUCTOS);
+        actualizarCarrito();
+
+        mostrarAvisoAPI();
+    }
+}
+
+function mostrarEstadoCarga(mensaje) {
+    if (!productGrid) return;
+
+    productGrid.innerHTML = `
+        <div class="sin-productos">
+            <h3>${mensaje}</h3>
+            <p>Espera un momento...</p>
+        </div>
+    `;
+}
+
+function mostrarAvisoAPI() {
+    const aviso = document.createElement("div");
+    aviso.className = "api-aviso";
+    aviso.innerHTML = `
+        <strong>Modo local:</strong>
+        No se pudo conectar con FastAPI. Se muestran productos desde JavaScript.
+    `;
+
+    const contenido = document.querySelector(".contenido");
+
+    if (contenido) {
+        contenido.prepend(aviso);
+
+        setTimeout(() => {
+            aviso.remove();
+        }, 6000);
+    }
+}
+
+/* ==============================
+   RENDER DE PRODUCTOS
+   ============================== */
+
+function renderizarProductos(listaProductos = PRODUCTOS) {
+    productGrid.innerHTML = "";
+
+    const productosActivos = listaProductos.filter(producto => producto.activo);
+
+    if (productosActivos.length === 0) {
+        productGrid.innerHTML = `
+            <div class="sin-productos">
+                <h3>No se encontraron productos</h3>
+                <p>Intenta con otra búsqueda o categoría.</p>
+            </div>
+        `;
+        return;
+    }
+
+    productosActivos.forEach(producto => {
+        const agotado = producto.stock <= 0;
+
+        const article = document.createElement("article");
+        article.className = agotado ? "producto producto-agotado" : "producto";
+        article.dataset.name = producto.nombre;
+        article.dataset.category = producto.categoria;
+        article.dataset.price = producto.precio;
+
+        article.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}">
+            <h3>${producto.nombre}</h3>
+
+            <p class="producto-precio">$${Number(producto.precio).toFixed(2)}</p>
+
+            <span class="producto-stock">
+                ${agotado ? "Sin stock disponible" : `Stock: ${producto.stock}`}
+            </span>
+
+            ${agotado ? '<span class="badge-agotado">Agotado</span>' : ""}
+
+            <button 
+                ${agotado ? "disabled" : ""}
+                onclick="agregarCarrito(${producto.id})">
+                ${agotado ? "Agotado" : "Añadir al Carrito"}
+            </button>
+        `;
+
+        productGrid.appendChild(article);
+    });
+}
+
+/* ==============================
+   CARRITO
+   ============================== */
+
+function agregarCarrito(idProducto) {
+    const producto = PRODUCTOS.find(item => item.id === idProducto);
+
+    if (!producto) {
+        alert("Producto no encontrado");
+        return;
+    }
+
+    if (producto.stock <= 0) {
+        alert("Producto agotado");
+        return;
+    }
+
+    const existente = carrito.find(item => item.id === idProducto);
 
     if (existente) {
+        if (existente.cantidad >= producto.stock) {
+            alert("No hay más stock disponible de este producto");
+            return;
+        }
+
         existente.cantidad += 1;
     } else {
         carrito.push({
-            nombre,
-            precio,
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: Number(producto.precio),
             cantidad: 1
         });
     }
 
-    puntos += Math.floor(precio / 10);
+    puntos += Math.floor(Number(producto.precio) / 10);
     actualizarCarrito();
 }
 
@@ -54,7 +196,11 @@ function actualizarCarrito() {
                 <h4>${item.nombre}</h4>
                 <p>${item.cantidad} item</p>
             </div>
-            <strong>$${itemTotal.toFixed(2)}</strong>
+
+            <div class="cart-item-actions">
+                <strong>$${itemTotal.toFixed(2)}</strong>
+                <button onclick="eliminarDelCarrito(${item.id})">×</button>
+            </div>
         `;
 
         cartItems.appendChild(div);
@@ -62,18 +208,53 @@ function actualizarCarrito() {
 
     subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
     totalElement.textContent = `$${subtotal.toFixed(2)}`;
-    loyaltyPoints.textContent = puntos;
-    pointsView.textContent = `${puntos} points`;
-    comprasCliente.textContent = totalProductos;
+
+    if (loyaltyPoints) {
+        loyaltyPoints.textContent = puntos;
+    }
+
+    if (pointsView) {
+        pointsView.textContent = `${puntos} points`;
+    }
+
+    if (comprasCliente) {
+        comprasCliente.textContent = totalProductos;
+    }
+
     if (cartCountMobile) {
-    cartCountMobile.textContent = totalProductos;
+        cartCountMobile.textContent = totalProductos;
+    }
 }
+
+function eliminarDelCarrito(idProducto) {
+    const productoEnCarrito = carrito.find(item => item.id === idProducto);
+
+    if (!productoEnCarrito) return;
+
+    const productoBase = PRODUCTOS.find(item => item.id === idProducto);
+
+    if (productoEnCarrito.cantidad > 1) {
+        productoEnCarrito.cantidad -= 1;
+    } else {
+        carrito = carrito.filter(item => item.id !== idProducto);
+    }
+
+    if (productoBase) {
+        const puntosARestar = Math.floor(Number(productoBase.precio) / 10);
+        puntos = Math.max(0, puntos - puntosARestar);
+    }
+
+    actualizarCarrito();
 }
 
 function vaciarCarrito() {
     carrito = [];
     puntos = 0;
     actualizarCarrito();
+}
+
+function calcularTotalCarrito() {
+    return carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
 }
 
 function enviarWhatsApp() {
@@ -88,7 +269,7 @@ function enviarWhatsApp() {
         mensaje += `- ${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)}%0A`;
     });
 
-    const total = carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    const total = calcularTotalCarrito();
 
     mensaje += `%0ATotal: $${total.toFixed(2)} MXN`;
     mensaje += `%0APuntos generados: ${puntos}`;
@@ -114,7 +295,10 @@ chips.forEach(chip => {
         chips.forEach(c => c.classList.remove("activo"));
         this.classList.add("activo");
 
-        categoryFilter.value = this.dataset.category;
+        if (categoryFilter) {
+            categoryFilter.value = this.dataset.category;
+        }
+
         filtrarProductos();
     });
 });
@@ -134,45 +318,55 @@ if (categoryFilter) {
 }
 
 function filtrarProductos() {
-    const texto = searchInput.value.toLowerCase();
-    const categoria = categoryFilter.value;
-    const productos = document.querySelectorAll(".producto");
+    const texto = searchInput ? searchInput.value.toLowerCase() : "";
+    const categoria = categoryFilter ? categoryFilter.value : "all";
 
-    productos.forEach(producto => {
-        const nombre = producto.dataset.name.toLowerCase();
-        const productoCategoria = producto.dataset.category;
+    const productosFiltrados = PRODUCTOS.filter(producto => {
+        const coincideTexto = producto.nombre.toLowerCase().includes(texto);
+        const coincideCategoria = categoria === "all" || producto.categoria === categoria;
 
-        const coincideTexto = nombre.includes(texto);
-        const coincideCategoria = categoria === "all" || productoCategoria === categoria;
-
-        producto.style.display = coincideTexto && coincideCategoria ? "block" : "none";
+        return producto.activo && coincideTexto && coincideCategoria;
     });
+
+    renderizarProductos(productosFiltrados);
 }
 
 /* ==============================
-   NAVEGACIÓN LATERAL
+   NAVEGACIÓN
    ============================== */
 
 function navegarSeccion(elemento, seccion) {
     const items = document.querySelectorAll(".sidebar li");
 
     items.forEach(item => item.classList.remove("activo"));
-    elemento.classList.add("activo");
+
+    if (elemento) {
+        elemento.classList.add("activo");
+    }
 
     if (seccion === "productos" || seccion === "catalogo") {
-        categoryFilter.value = "all";
-        searchInput.value = "";
-
-        chips.forEach(c => c.classList.remove("activo"));
-
-        const chipAll = document.querySelector('.chip[data-category="all"]');
-
-        if (chipAll) {
-            chipAll.classList.add("activo");
-        }
-
-        filtrarProductos();
+        reiniciarCatalogo();
     }
+}
+
+function reiniciarCatalogo() {
+    if (categoryFilter) {
+        categoryFilter.value = "all";
+    }
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    chips.forEach(c => c.classList.remove("activo"));
+
+    const chipAll = document.querySelector('.chip[data-category="all"]');
+
+    if (chipAll) {
+        chipAll.classList.add("activo");
+    }
+
+    renderizarProductos(PRODUCTOS);
 }
 
 /* ==============================
@@ -227,8 +421,11 @@ function abrirModal(tipo) {
     }
 
     if (tipo === "pagos") {
+        const total = calcularTotalCarrito();
+
         contenido = `
             <h2>Métodos de Pago</h2>
+            <p>Total actual del carrito: <strong>$${total.toFixed(2)} MXN</strong></p>
             <p>Selecciona el método de pago que deseas usar.</p>
 
             <div class="modal-form">
@@ -294,7 +491,10 @@ function abrirModal(tipo) {
 
 function cerrarModal() {
     const modal = document.getElementById("modal");
-    modal.classList.remove("activo");
+
+    if (modal) {
+        modal.classList.remove("activo");
+    }
 }
 
 function calificarServicio(valor) {
@@ -313,17 +513,18 @@ function calificarServicio(valor) {
         }
     });
 
-    ratingText.textContent = `Calificación seleccionada: ${valor} de 5 estrellas`;
+    if (ratingText) {
+        ratingText.textContent = `Calificación seleccionada: ${valor} de 5 estrellas`;
+    }
 }
 
 /* ==============================
    FUNCIONES DEMO
-   Después se conectarán con Cash Control
    ============================== */
 
 function consultarClienteDemo() {
-    const nombre = document.getElementById("clienteNombre").value;
-    const codigo = document.getElementById("clienteCodigo").value;
+    const nombre = document.getElementById("clienteNombre").value.trim();
+    const codigo = document.getElementById("clienteCodigo").value.trim();
     const resultado = document.getElementById("resultadoCliente");
 
     if (!nombre || !codigo) {
@@ -360,6 +561,7 @@ function consultarClienteDemo() {
 function seleccionarPago() {
     const metodo = document.getElementById("metodoPago").value;
     const resultado = document.getElementById("resultadoPago");
+    const total = calcularTotalCarrito();
 
     let mensaje = "";
 
@@ -377,14 +579,22 @@ function seleccionarPago() {
 
     resultado.innerHTML = `
         <div class="resultado-cliente">
-            <strong>${mensaje}</strong>
+            <div>
+                <span>Método</span>
+                <strong>${metodo}</strong>
+            </div>
+            <div>
+                <span>Total</span>
+                <strong>$${total.toFixed(2)} MXN</strong>
+            </div>
+            <p>${mensaje}</p>
         </div>
     `;
 }
 
 function enviarComentarioDemo() {
-    const nombre = document.getElementById("comentarioNombre").value;
-    const comentario = document.getElementById("comentarioTexto").value;
+    const nombre = document.getElementById("comentarioNombre").value.trim();
+    const comentario = document.getElementById("comentarioTexto").value.trim();
     const resultado = document.getElementById("resultadoComentario");
 
     if (!nombre || !comentario) {
@@ -412,17 +622,6 @@ function guardarCalificacionDemo() {
     alert(`Gracias por calificar el servicio con ${calificacionActual} estrellas`);
 }
 
-/* Cerrar modal al hacer clic fuera */
-const modal = document.getElementById("modal");
-
-if (modal) {
-    modal.addEventListener("click", function (event) {
-        if (event.target.id === "modal") {
-            cerrarModal();
-        }
-    });
-}
-
 /* ==============================
    FUNCIONES MOBILE
    ============================== */
@@ -447,18 +646,7 @@ function navegarMobile(seccion) {
     cerrarCarritoMobile();
 
     if (seccion === "productos" || seccion === "catalogo") {
-        categoryFilter.value = "all";
-        searchInput.value = "";
-
-        chips.forEach(c => c.classList.remove("activo"));
-
-        const chipAll = document.querySelector('.chip[data-category="all"]');
-
-        if (chipAll) {
-            chipAll.classList.add("activo");
-        }
-
-        filtrarProductos();
+        reiniciarCatalogo();
 
         const contenido = document.querySelector(".contenido");
 
@@ -470,3 +658,30 @@ function navegarMobile(seccion) {
         }
     }
 }
+
+/* ==============================
+   EVENTOS GLOBALES
+   ============================== */
+
+const modal = document.getElementById("modal");
+
+if (modal) {
+    modal.addEventListener("click", function (event) {
+        if (event.target.id === "modal") {
+            cerrarModal();
+        }
+    });
+}
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        cerrarModal();
+        cerrarCarritoMobile();
+    }
+});
+
+/* ==============================
+   INICIALIZACIÓN
+   ============================== */
+
+cargarProductosDesdeAPI();
