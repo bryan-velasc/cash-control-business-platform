@@ -2,6 +2,30 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+## [0.4.1] - 2026-06-14
+
+### Agregado
+
+- Conexión de la página web con el endpoint `GET /products/public`.
+- Carga de productos desde FastAPI.
+- Respaldo local usando `js/productos.js` si la API no responde.
+- Mensaje de aviso cuando la página entra en modo local.
+- Variable `API_PRODUCTOS_URL` en `app.js`.
+
+### Mejorado
+
+- El catálogo ya no depende únicamente de productos locales.
+- La web queda preparada para conectarse con backend en producción.
+- El flujo de productos se acerca a la arquitectura final Netlify + FastAPI + Cash Control.
+
+### Pendiente
+
+- Cambiar URL local por URL pública de Render.
+- Conectar productos con MongoDB Atlas.
+- Administrar productos desde Cash Control.
+- Proteger endpoints administrativos.
+- Configurar CORS de forma segura para producción.
+
 ## [0.4.0] - 2026-06-14
 
 ### Agregado
