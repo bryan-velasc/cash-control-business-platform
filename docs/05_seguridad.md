@@ -428,6 +428,30 @@ Estos registros ayudan a detectar fallos, fraudes o comportamientos anormales.
 
 ---
 
+## Nota de seguridad: CORS en desarrollo
+
+Durante la fase de desarrollo, el backend FastAPI permite orígenes amplios para facilitar pruebas locales entre la página web y la API.
+
+Esto no debe mantenerse igual en producción.
+
+### Riesgo
+
+Permitir `*` en CORS puede permitir que otros sitios intenten consumir la API desde navegadores externos.
+
+### Control para producción
+
+Antes de desplegar el backend, se debe limitar CORS únicamente a dominios autorizados, por ejemplo:
+
+- Página web oficial en Netlify.
+- Dominio autorizado de Cash Control.
+- Entorno local solo para desarrollo.
+
+### Estado
+
+Pendiente de endurecimiento antes de producción.
+
+---
+
 ## Conclusión
 
 La seguridad del proyecto debe aplicarse desde el diseño. Cash Control Business Platform manejará información sensible del negocio y de clientes, por lo que es necesario separar responsabilidades, proteger datos privados, validar operaciones desde el backend y mantener trazabilidad.
