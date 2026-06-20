@@ -6,12 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import ping_database, close_database
 from app.routes.product_routes import router as product_router
 from app.repositories.product_repository import seed_products_if_empty
-
+from app.routes.inventory_routes import router as inventory_router
+from app.repositories.inventory_repository import create_inventory_indexes
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await ping_database()
     seed_result = await seed_products_if_empty()
+    await create_inventory_indexes()
 
     print("MongoDB conectado correctamente")
     print(f"Seed productos: {seed_result}")
@@ -67,3 +69,4 @@ async def health_check():
 
 
 app.include_router(product_router)
+app.include_router(inventory_router)
