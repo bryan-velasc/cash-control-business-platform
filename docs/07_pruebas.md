@@ -874,6 +874,62 @@ Completado.
 ### Observaciones
 
 El archivo `backend/.env` contiene credenciales reales y no debe subirse a GitHub. Solo debe subirse `backend/.env.example`.
+PRU-014: Verificar historial de movimientos de stock
+ID de prueba
+
+PRU-014
+
+Fecha
+
+14/06/2026
+
+Módulo
+
+Backend / Inventario / Stock
+
+Función probada
+
+Verificar que el backend permita registrar movimientos de inventario y guardar historial de stock en MongoDB Atlas.
+
+Archivos modificados
+backend/main.py
+backend/app/models/inventory_model.py
+backend/app/routes/inventory_routes.py
+backend/app/repositories/inventory_repository.py
+Endpoints probados
+POST /inventory/stock/adjust/{product_id}
+GET /inventory/stock/history
+GET /inventory/stock/history?product_id={id}
+GET /inventory/stock/low
+Elementos probados
+Movimiento de entrada de stock.
+Movimiento de salida de stock.
+Ajuste manual de inventario.
+Validación de stock insuficiente.
+Registro de stock anterior.
+Registro de stock nuevo.
+Registro de motivo.
+Registro de usuario responsable.
+Registro de referencia.
+Consulta general de historial.
+Consulta filtrada por producto.
+Consulta de productos con stock bajo.
+Protección mediante x-admin-token.
+Resultado esperado
+
+Cada modificación de stock debe actualizar el producto en MongoDB Atlas y crear un registro en la colección stock_movements.
+
+Resultado obtenido
+
+Los movimientos de inventario se registraron correctamente. El stock del producto se actualizó y se creó historial en MongoDB Atlas con producto, tipo de movimiento, stock anterior, cantidad, stock nuevo, motivo, usuario, referencia y fecha.
+
+Estado
+
+Completado.
+
+Observaciones
+
+Este historial permitirá auditar entradas, salidas, ajustes, pérdidas, ventas manuales y correcciones de inventario desde Cash Control.
 
 # Conclusión
 

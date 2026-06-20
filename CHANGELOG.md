@@ -2,6 +2,37 @@
 
 Todos los cambios importantes del proyecto serán documentados en este archivo.
 
+[0.7.0] - 2026-06-14
+Agregado
+Modelo StockAdjustment.
+Modelo StockMovement.
+Modelo StockHistoryResponse.
+Endpoint POST /inventory/stock/adjust/{product_id}.
+Endpoint GET /inventory/stock/history.
+Endpoint GET /inventory/stock/low.
+Repositorio inventory_repository.py.
+Colección stock_movements en MongoDB Atlas.
+Registro de movimientos de entrada.
+Registro de movimientos de salida.
+Registro de ajustes manuales.
+Consulta de historial general y por producto.
+Consulta de productos con stock bajo.
+Índices para historial de movimientos.
+Modificado
+main.py ahora registra rutas de inventario.
+La API cambió a versión 0.3.0.
+El backend ahora puede auditar cambios de stock.
+Seguridad
+Los endpoints de inventario requieren x-admin-token.
+El historial de stock queda protegido como información administrativa.
+El sistema rechaza salidas de stock mayores al inventario disponible.
+Pendiente
+Conectar historial de stock con la app Flutter.
+Crear pantalla de movimientos de inventario.
+Registrar ventas reales como salidas automáticas.
+Agregar reportes de pérdidas, ajustes y rotación.
+Agregar usuario real autenticado en lugar de texto manual.
+
 ## [0.5.0] - 2026-06-14
 
 ### Agregado

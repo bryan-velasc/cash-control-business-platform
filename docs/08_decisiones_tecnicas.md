@@ -793,6 +793,53 @@ MongoDB Atlas ya forma parte de la arquitectura planeada de Cash Control. Ademá
 
 FastAPI ya puede conectarse a MongoDB Atlas y entregar productos desde la colección `products`.
 
+# ADR-018: Registrar historial de movimientos de stock
+Estado
+
+Aceptada.
+
+Contexto
+
+El backend ya permitía administrar productos y modificar stock, pero todavía no existía un historial que permitiera saber por qué cambió el inventario. Esto generaba riesgo de pérdida de control, errores humanos y falta de trazabilidad.
+
+Decisión
+
+Se decidió crear un módulo de inventario con movimientos de stock registrados en una colección independiente llamada stock_movements.
+
+Alternativas consideradas
+Solo actualizar el campo stock del producto.
+Guardar historial dentro del mismo documento del producto.
+Esperar hasta crear ventas reales.
+Llevar el historial solo en la app Flutter.
+Motivo de la decisión
+
+Un negocio necesita saber no solo cuánto stock tiene, sino también por qué cambió. Registrar entradas, salidas y ajustes permite auditar inventario, detectar pérdidas y construir reportes más confiables.
+
+Ventajas
+Mayor trazabilidad.
+Mejor control de inventario.
+Registro de entradas y salidas.
+Detección de stock bajo.
+Preparación para reportes de ventas.
+Preparación para auditoría.
+Base para conectar Cash Control como panel administrativo.
+Riesgos
+Si no se protege correctamente, el historial puede exponer información interna.
+Si se registra mal el motivo, la auditoría pierde valor.
+Todavía no existe usuario autenticado real.
+El stock puede modificarse desde varios endpoints si no se centraliza después.
+Controles
+Proteger endpoints con x-admin-token.
+Registrar stock anterior y stock nuevo.
+Registrar usuario o responsable.
+Registrar motivo obligatorio.
+Rechazar salidas mayores al stock disponible.
+Crear colección separada para movimientos.
+Conectar después con usuarios reales y roles.
+Resultado
+
+El backend ya puede registrar movimientos de inventario y mantener historial en MongoDB Atlas.
+
 ## Conclusión
 
 Las decisiones técnicas registradas en este documento permiten entender la evolución del proyecto y justificar su arquitectura. Cada decisión fue tomada considerando escalabilidad, seguridad, rendimiento, mantenimiento y valor profesional para portafolio.
