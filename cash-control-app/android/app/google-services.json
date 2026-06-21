@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "504613830241",
+    "project_id": "cash-control-4106f",
+    "storage_bucket": "cash-control-4106f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504613830241:android:295d3540ee3cb31a4c7420",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504613830241-15ibcqn2ipkaqceburu8bqk8qk67hkbu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.frontend",
+            "certificate_hash": "49800d49d7a337f100639f417b65a97b6626b601"
+          }
+        },
+        {
+          "client_id": "504613830241-ncvjmsbbq1ir8f857lms0h2hu7nk8672.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6NQMwndv6b_ApSuJdkuWXEkEVa2_4UWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504613830241-ncvjmsbbq1ir8f857lms0h2hu7nk8672.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "504613830241-14v5s68s6e0je6slm07kn7aa16n5clpu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.frontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
