@@ -33,6 +33,8 @@ import 'global_market_screen.dart';
 import 'sat_screen.dart';
 import 'credit_bureau_screen.dart';
 
+import '../modules/business/screens/business_dashboard_screen.dart';
+
 import '../widgets/balance_card.dart';
 import '../widgets/income_card.dart';
 import '../widgets/expense_card.dart';
@@ -718,6 +720,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (result == true) {
               refreshDashboard();
             }
+          },
+        ),
+        
+                buildQuickButton(
+          title: "Negocio",
+          icon: Icons.storefront_rounded,
+          color: Colors.amberAccent,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const BusinessDashboardScreen(),
+              ),
+            );
           },
         ),
 
