@@ -36,3 +36,17 @@ serviceAccountKey.json
 # Environment files
 .env
 backend/.env
+
+# Flutter generated/local files
+cash-control-app/.dart_tool/
+cash-control-app/build/
+cash-control-app/.flutter-plugins
+cash-control-app/.flutter-plugins-dependencies
+cash-control-app/frontend.iml
+cash-control-app/.idea/
+cash-control-app/.vs/
+cash-control-app/android/local.properties
+cash-control-app/android/key.properties
+cash-control-app/**/*.jks
+cash-control-app/.env
+cash-control-app/**/.env

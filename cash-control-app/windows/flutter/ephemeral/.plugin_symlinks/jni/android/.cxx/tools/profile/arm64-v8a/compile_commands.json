@@ -1,0 +1,17 @@
+[
+{
+  "directory": "C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/arm64-v8a",
+  "command": "C:\\Users\\velas\\AppData\\Local\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=aarch64-none-linux-android21 --sysroot=C:/Users/velas/AppData/Local/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DDART_SHARED_LIB -Djni_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\jni.dir\\dartjni.c.o -c C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\dartjni.c",
+  "file": "C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\dartjni.c"
+},
+{
+  "directory": "C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/arm64-v8a",
+  "command": "C:\\Users\\velas\\AppData\\Local\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=aarch64-none-linux-android21 --sysroot=C:/Users/velas/AppData/Local/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DDART_SHARED_LIB -Djni_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\jni.dir\\third_party\\global_jni_env.c.o -c C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\third_party\\global_jni_env.c",
+  "file": "C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\third_party\\global_jni_env.c"
+},
+{
+  "directory": "C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/arm64-v8a",
+  "command": "C:\\Users\\velas\\AppData\\Local\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=aarch64-none-linux-android21 --sysroot=C:/Users/velas/AppData/Local/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DDART_SHARED_LIB -Djni_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\jni.dir\\include\\dart_api_dl.c.o -c C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\include\\dart_api_dl.c",
+  "file": "C:\\Users\\velas\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\jni-1.0.0\\src\\include\\dart_api_dl.c"
+}
+]
