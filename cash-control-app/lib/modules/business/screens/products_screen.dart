@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
 import '../services/product_service.dart';
-import 'add_product_screen.dart';
+import 'product_form_screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -47,99 +47,180 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
-  Future<void> _openAddProductScreen() async {
-    final created = await Navigator.push(
+  Future<void> _openProductForm({
+    ProductModel? product,
+  }) async {
+    final changed = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const AddProductScreen(),
+        builder: (_) => ProductFormScreen(
+          product: product,
+        ),
       ),
     );
 
-    if (created == true) {
+    if (changed == true) {
       await _loadProducts();
     }
   }
 
   Future<void> _openStockDialog(ProductModel product) async {
-  final controller = TextEditingController(
-    text: product.stock.toString(),
-  );
+    final controller = TextEditingController(
+      text: product.stock.toString(),
+    );
 
-  final newStock = await showDialog<int>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: const Color(0xFF181820),
-        title: const Text(
-          'Ajustar stock',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
-            labelText: 'Nuevo stock',
-            labelStyle: TextStyle(color: Colors.white70),
+    final newStock = await showDialog<int>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF181820),
+          title: const Text(
+            'Ajustar stock',
+            style: TextStyle(color: Colors.white),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amberAccent,
-              foregroundColor: Colors.black,
+          content: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
+              labelText: 'Nuevo stock',
+              labelStyle: TextStyle(color: Colors.white70),
             ),
-            onPressed: () {
-              final value = int.tryParse(controller.text.trim());
-
-              if (value == null || value < 0) {
-                return;
-              }
-
-              Navigator.pop(context, value);
-            },
-            child: const Text('Guardar'),
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amberAccent,
+                foregroundColor: Colors.black,
+              ),
+              onPressed: () {
+                final value = int.tryParse(
+                  controller.text.trim(),
+                );
+
+                if (value == null || value < 0) {
+                  return;
+                }
+
+                Navigator.pop(context, value);
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    controller.dispose();
+
+    if (newStock == null) {
+      return;
+    }
+
+    try {
+      await ProductService.updateProductStock(
+        id: product.id,
+        stock: newStock,
       );
-    },
-  );
 
-  controller.dispose();
+      if (!mounted) return;
 
-  if (newStock == null) {
-    return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Stock actualizado correctamente'),
+        ),
+      );
+
+      await _loadProducts();
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al actualizar stock: $error'),
+        ),
+      );
+    }
   }
 
-  try {
-    await ProductService.updateProductStock(
-      id: product.id,
-      stock: newStock,
-    );
+  Future<void> _confirmDeactivate(ProductModel product) async {
+    final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF181820),
+              title: const Text(
+                'Desactivar producto',
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Text(
+                '¿Seguro que quieres desactivar "${product.nombre}"? '
+                'Ya no aparecerá en el catálogo público.',
+                style: const TextStyle(color: Colors.white70),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Cancelar'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Desactivar'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
 
-    if (!mounted) return;
+    if (!confirmed) {
+      return;
+    }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Stock actualizado correctamente'),
-      ),
-    );
+    try {
+      await ProductService.deleteProduct(product.id);
 
-    await _loadProducts();
-  } catch (error) {
-    if (!mounted) return;
+      if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error al actualizar stock: $error'),
-      ),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Producto desactivado correctamente'),
+        ),
+      );
+
+      await _loadProducts();
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al desactivar producto: $error'),
+        ),
+      );
+    }
   }
-}
+
+  Color _stockColor(ProductModel product) {
+    final stockMinimo = product.stockMinimo ?? 0;
+
+    if (product.stock <= stockMinimo) {
+      return Colors.redAccent;
+    }
+
+    if (product.stock <= stockMinimo + 5) {
+      return Colors.orangeAccent;
+    }
+
+    return Colors.greenAccent;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +241,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         foregroundColor: Colors.black,
         icon: const Icon(Icons.add_rounded),
         label: const Text('Agregar'),
-        onPressed: _openAddProductScreen,
+        onPressed: () => _openProductForm(),
       ),
       body: _buildBody(),
     );
@@ -253,7 +334,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               const SizedBox(height: 18),
               ElevatedButton.icon(
-                onPressed: _openAddProductScreen,
+                onPressed: () => _openProductForm(),
                 icon: const Icon(Icons.add_rounded),
                 label: const Text('Agregar producto'),
                 style: ElevatedButton.styleFrom(
@@ -282,7 +363,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
               color: const Color(0xFF181820),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: Colors.white12,
+                color: product.activo
+                    ? Colors.white12
+                    : Colors.redAccent.withOpacity(0.35),
               ),
             ),
             child: Row(
@@ -294,77 +377,127 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     color: Colors.amberAccent.withOpacity(0.14),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(
-                    Icons.inventory_2_rounded,
-                    color: Colors.amberAccent,
+                  child: Icon(
+                    product.activo
+                        ? Icons.inventory_2_rounded
+                        : Icons.inventory_2_outlined,
+                    color: product.activo
+                        ? Colors.amberAccent
+                        : Colors.white38,
                     size: 30,
                   ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product.nombre,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                  child: InkWell(
+                    onTap: () => _openProductForm(
+                      product: product,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.nombre,
+                          style: TextStyle(
+                            color: product.activo
+                                ? Colors.white
+                                : Colors.white54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        product.categoria,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
+                        const SizedBox(height: 4),
+                        Text(
+                          product.categoria,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Text(
-                            '\$${product.precio.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.amberAccent,
-                              fontWeight: FontWeight.bold,
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Text(
+                              '\$${product.precio.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: Colors.amberAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Stock: ${product.stock}',
+                              style: TextStyle(
+                                color: _stockColor(product),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (product.proveedor != null &&
+                            product.proveedor!.trim().isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              'Proveedor: ${product.proveedor}',
+                              style: const TextStyle(
+                                color: Colors.white54,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Stock: ${product.stock}',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                Column(
-  children: [
-    Icon(
-      product.activo
-          ? Icons.check_circle_rounded
-          : Icons.cancel_rounded,
-      color: product.activo
-          ? Colors.greenAccent
-          : Colors.redAccent,
-    ),
-    const SizedBox(height: 8),
-    IconButton(
-      tooltip: 'Ajustar stock',
-      onPressed: () => _openStockDialog(product),
-      icon: const Icon(
-        Icons.warehouse_rounded,
-        color: Colors.amberAccent,
-      ),
-    ),
-  ],
-),
+                PopupMenuButton<String>(
+                  icon: const Icon(
+                    Icons.more_vert_rounded,
+                    color: Colors.white70,
+                  ),
+                  color: const Color(0xFF242430),
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      _openProductForm(
+                        product: product,
+                      );
+                    }
+
+                    if (value == 'stock') {
+                      _openStockDialog(product);
+                    }
+
+                    if (value == 'deactivate') {
+                      _confirmDeactivate(product);
+                    }
+                  },
+                  itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Text(
+                          'Editar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'stock',
+                        child: Text(
+                          'Ajustar stock',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'deactivate',
+                        child: Text(
+                          'Desactivar',
+                          style: TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
+                    ];
+                  },
+                ),
               ],
             ),
           );

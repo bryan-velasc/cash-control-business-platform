@@ -10,7 +10,7 @@
   final String? proveedor;
   final int? stockMinimo;
 
-  const ProductModel({
+  ProductModel({
     required this.id,
     required this.nombre,
     required this.categoria,
@@ -32,52 +32,37 @@
       imagen: json['imagen']?.toString() ?? '',
       stock: _toInt(json['stock']),
       activo: json['activo'] == true,
-      precioCompra: json['precio_compra'] == null ? null : _toDouble(json['precio_compra']),
+      precioCompra: _toNullableDouble(json['precio_compra']),
       proveedor: json['proveedor']?.toString(),
-      stockMinimo: json['stock_minimo'] == null ? null : _toInt(json['stock_minimo']),
+      stockMinimo: _toNullableInt(json['stock_minimo']),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'nombre': nombre,
-      'categoria': categoria,
-      'precio': precio,
-      'imagen': imagen,
-      'stock': stock,
-      'activo': activo,
-      'precio_compra': precioCompra,
-      'proveedor': proveedor,
-      'stock_minimo': stockMinimo,
-    };
-  }
-
-  Map<String, dynamic> toCreateJson() {
-    return {
-      'nombre': nombre,
-      'categoria': categoria,
-      'precio': precio,
-      'imagen': imagen,
-      'stock': stock,
-      'activo': activo,
-      'precio_compra': precioCompra,
-      'proveedor': proveedor,
-      'stock_minimo': stockMinimo,
-    };
-  }
-
   static int _toInt(dynamic value) {
+    if (value == null) return 0;
     if (value is int) return value;
     if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
+    return int.tryParse(value.toString()) ?? 0;
+  }
+
+  static int? _toNullableInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    return int.tryParse(value.toString());
   }
 
   static double _toDouble(dynamic value) {
+    if (value == null) return 0;
     if (value is double) return value;
     if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
+    return double.tryParse(value.toString()) ?? 0;
+  }
+
+  static double? _toNullableDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    return double.tryParse(value.toString());
   }
 }
