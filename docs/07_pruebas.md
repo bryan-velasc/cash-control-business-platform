@@ -1005,6 +1005,37 @@ Observaciones
 
 Este módulo será la base para que Cash Control pueda manejar clientes, deudas, pagos semanales, historial de abonos y control de fiados desde la app Flutter.
 
+## PRU-016 - Conexión Flutter Web con módulo Mi Negocio
+
+**Fecha:** 21/06/2026  
+**Módulo:** Flutter Cash Control - Mi Negocio  
+**Tipo:** Prueba funcional de integración  
+
+### Objetivo
+
+Validar que la app Flutter Web pueda abrir el módulo Mi Negocio y cargar productos desde el backend FastAPI conectado a MongoDB Atlas.
+
+### Flujo probado
+
+1. Se levantó el backend con FastAPI.
+2. Se abrió Flutter Web.
+3. Se ingresó al dashboard principal de Cash Control.
+4. Se seleccionó el botón "Negocio".
+5. Se abrió el módulo "Mi Negocio".
+6. Se ingresó a la pantalla "Productos".
+7. Los productos se cargaron correctamente desde el endpoint administrativo.
+
+### Resultado
+
+Prueba exitosa.  
+Flutter Web logró consumir la API de productos y mostrar información en pantalla.
+
+### Observaciones
+
+El endpoint administrativo `/products/admin` fue protegido con `x-admin-token`.  
+La configuración actual usa token temporal de desarrollo.  
+En producción se deberá reemplazar por autenticación real con JWT y roles.
+
 # Conclusión
 
 El plan de pruebas permitirá validar cada parte del sistema antes de avanzar a nuevas fases. Esto reduce errores, mejora la seguridad y genera evidencia profesional del proceso de desarrollo.
