@@ -52,17 +52,43 @@ class ProductService {
     return ProductModel.fromJson(Map<String, dynamic>.from(data));
   }
 
-  static Future<ProductModel> createProduct(ProductModel product) async {
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/products/create'),
-      headers: ApiConfig.adminHeaders,
-      body: jsonEncode(product.toCreateJson()),
+  static Future<ProductModel> createProduct({
+  required String nombre,
+  required String categoria,
+  required double precio,
+  required String imagen,
+  required int stock,
+  required bool activo,
+  double? precioCompra,
+  String? proveedor,
+  int? stockMinimo,
+}) async {
+  final response = await http.post(
+    Uri.parse('${ApiConfig.baseUrl}/products/create'),
+    headers: ApiConfig.adminHeaders,
+    body: jsonEncode({
+      'nombre': nombre,
+      'categoria': categoria,
+      'precio': precio,
+      'imagen': imagen,
+      'stock': stock,
+      'activo': activo,
+      'precio_compra': precioCompra,
+      'proveedor': proveedor,
+      'stock_minimo': stockMinimo ?? 0,
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    return ProductModel.fromJson(
+      jsonDecode(response.body),
     );
-
-    final data = _decodeResponse(response);
-
-    return ProductModel.fromJson(Map<String, dynamic>.from(data));
   }
+
+  throw Exception(
+    'Error ${response.statusCode}: ${response.body}',
+  );
+}
 
   static Future<ProductModel> updateProduct({
     required int productId,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
 import '../services/product_service.dart';
-import '../widgets/product_card.dart';
+import 'add_product_screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -12,26 +12,14 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
-  List<ProductModel> _products = [];
-  List<ProductModel> _filteredProducts = [];
-
   bool _isLoading = true;
   String? _errorMessage;
+  List<ProductModel> _products = [];
 
   @override
   void initState() {
     super.initState();
     _loadProducts();
-    _searchController.addListener(_filterProducts);
-  }
-
-  @override
-  void dispose() {
-    _searchController.removeListener(_filterProducts);
-    _searchController.dispose();
-    super.dispose();
   }
 
   Future<void> _loadProducts() async {
@@ -47,367 +35,246 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
       setState(() {
         _products = products;
-        _filteredProducts = products;
         _isLoading = false;
       });
-
-      _filterProducts();
     } catch (error) {
       if (!mounted) return;
 
       setState(() {
-        _isLoading = false;
         _errorMessage = error.toString();
+        _isLoading = false;
       });
     }
   }
 
-  void _filterProducts() {
-    final query = _searchController.text.trim().toLowerCase();
-
-    if (query.isEmpty) {
-      setState(() {
-        _filteredProducts = _products;
-      });
-      return;
-    }
-
-    setState(() {
-      _filteredProducts = _products.where((product) {
-        final name = product.nombre.toLowerCase();
-        final category = product.categoria.toLowerCase();
-        final provider = product.proveedor?.toLowerCase() ?? '';
-
-        return name.contains(query) ||
-            category.contains(query) ||
-            provider.contains(query);
-      }).toList();
-    });
-  }
-
-  void _showPendingFeature(String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature se implementará en la siguiente fase.'),
+  Future<void> _openAddProductScreen() async {
+    final created = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AddProductScreen(),
       ),
     );
+
+    if (created == true) {
+      await _loadProducts();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final totalStock = _products.fold<int>(
-      0,
-      (total, product) => total + product.stock,
-    );
-
-    final activeProducts = _products.where((product) => product.activo).length;
-
     return Scaffold(
+      backgroundColor: const Color(0xFF101014),
       appBar: AppBar(
         title: const Text('Productos'),
+        backgroundColor: const Color(0xFF181820),
         actions: [
           IconButton(
             onPressed: _loadProducts,
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Actualizar',
+            icon: const Icon(Icons.refresh_rounded),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showPendingFeature('Crear producto'),
-        icon: const Icon(Icons.add),
-        label: const Text('Nuevo'),
+        backgroundColor: Colors.amberAccent,
+        foregroundColor: Colors.black,
+        icon: const Icon(Icons.add_rounded),
+        label: const Text('Agregar'),
+        onPressed: _openAddProductScreen,
       ),
-      body: RefreshIndicator(
-        onRefresh: _loadProducts,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _ProductsHeader(
-              totalProducts: _products.length,
-              activeProducts: activeProducts,
-              totalStock: totalStock,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Buscar producto',
-                hintText: 'Nombre, categoría o proveedor',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_isLoading)
-              const _LoadingState()
-            else if (_errorMessage != null)
-              _ErrorState(
-                message: _errorMessage!,
-                onRetry: _loadProducts,
-              )
-            else if (_filteredProducts.isEmpty)
-              const _EmptyState()
-            else
-              ..._filteredProducts.map(
-                (product) => ProductCard(
-                  product: product,
-                  onTap: () => _showProductDetails(product),
-                  onEdit: () => _showPendingFeature('Editar producto'),
-                  onStock: () => _showPendingFeature('Ajustar stock'),
-                ),
-              ),
-          ],
-        ),
-      ),
+      body: _buildBody(),
     );
   }
 
-  void _showProductDetails(ProductModel product) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.amberAccent,
+        ),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Colors.redAccent,
+                size: 48,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'No se pudieron cargar los productos',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
               Text(
-                product.nombre,
+                _errorMessage!,
                 style: const TextStyle(
-                  fontSize: 22,
+                  color: Colors.white70,
+                  fontSize: 13,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 18),
+              ElevatedButton.icon(
+                onPressed: _loadProducts,
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('Reintentar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amberAccent,
+                  foregroundColor: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_products.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.inventory_2_outlined,
+                color: Colors.white54,
+                size: 56,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Todavía no hay productos',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
-              _DetailRow(
-                label: 'Categoría',
-                value: product.categoria,
-              ),
-              _DetailRow(
-                label: 'Precio venta',
-                value: '\$${product.precio.toStringAsFixed(2)}',
-              ),
-              _DetailRow(
-                label: 'Stock',
-                value: product.stock.toString(),
-              ),
-              _DetailRow(
-                label: 'Estado',
-                value: product.activo ? 'Activo' : 'Inactivo',
-              ),
-              if (product.precioCompra != null)
-                _DetailRow(
-                  label: 'Precio compra',
-                  value: '\$${product.precioCompra!.toStringAsFixed(2)}',
+              const SizedBox(height: 8),
+              const Text(
+                'Agrega tu primer producto para comenzar a manejar inventario.',
+                style: TextStyle(
+                  color: Colors.white70,
                 ),
-              if (product.proveedor != null)
-                _DetailRow(
-                  label: 'Proveedor',
-                  value: product.proveedor!,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 18),
+              ElevatedButton.icon(
+                onPressed: _openAddProductScreen,
+                icon: const Icon(Icons.add_rounded),
+                label: const Text('Agregar producto'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amberAccent,
+                  foregroundColor: Colors.black,
                 ),
-              if (product.stockMinimo != null)
-                _DetailRow(
-                  label: 'Stock mínimo',
-                  value: product.stockMinimo.toString(),
-                ),
+              ),
             ],
           ),
-        );
-      },
-    );
-  }
-}
-
-class _ProductsHeader extends StatelessWidget {
-  final int totalProducts;
-  final int activeProducts;
-  final int totalStock;
-
-  const _ProductsHeader({
-    required this.totalProducts,
-    required this.activeProducts,
-    required this.totalStock,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _SummaryBox(
-            title: 'Productos',
-            value: totalProducts.toString(),
-            icon: Icons.shopping_bag_outlined,
-          ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _SummaryBox(
-            title: 'Activos',
-            value: activeProducts.toString(),
-            icon: Icons.check_circle_outline,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _SummaryBox(
-            title: 'Stock',
-            value: totalStock.toString(),
-            icon: Icons.inventory_2_outlined,
-          ),
-        ),
-      ],
-    );
-  }
-}
+      );
+    }
 
-class _SummaryBox extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
+    return RefreshIndicator(
+      onRefresh: _loadProducts,
+      child: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 90),
+        itemCount: _products.length,
+        itemBuilder: (context, index) {
+          final product = _products[index];
 
-  const _SummaryBox({
-    required this.title,
-    required this.value,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          Icon(icon),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LoadingState extends StatelessWidget {
-  const _LoadingState();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 60),
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-}
-
-class _ErrorState extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorState({
-    required this.message,
-    required this.onRetry,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: Column(
-        children: [
-          const Icon(
-            Icons.error_outline,
-            size: 54,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'No se pudieron cargar los productos',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
-          FilledButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Reintentar'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EmptyState extends StatelessWidget {
-  const _EmptyState();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 60),
-      child: Center(
-        child: Text('No hay productos para mostrar.'),
-      ),
-    );
-  }
-}
-
-class _DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _DetailRow({
-    required this.label,
-    required this.value,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              '$label:',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+          return Container(
+            margin: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFF181820),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: Colors.white12,
               ),
             ),
-          ),
-          Expanded(
-            child: Text(value),
-          ),
-        ],
+            child: Row(
+              children: [
+                Container(
+                  width: 58,
+                  height: 58,
+                  decoration: BoxDecoration(
+                    color: Colors.amberAccent.withOpacity(0.14),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.inventory_2_rounded,
+                    color: Colors.amberAccent,
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.nombre,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        product.categoria,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Text(
+                            '\$${product.precio.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.amberAccent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Stock: ${product.stock}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  product.activo
+                      ? Icons.check_circle_rounded
+                      : Icons.cancel_rounded,
+                  color: product.activo
+                      ? Colors.greenAccent
+                      : Colors.redAccent,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
