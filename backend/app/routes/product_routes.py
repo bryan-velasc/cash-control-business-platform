@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 
 from app.models.product_model import ProductPublic, ProductAdmin
 from app.repositories.product_repository import (
     get_public_products_from_db,
     get_admin_products_from_db,
-    get_public_product_by_id_from_db
+    get_public_product_by_id_from_db,
 )
+from app.security import verify_admin_token
 
 
 router = APIRouter(
@@ -26,12 +27,13 @@ async def get_public_products():
 
 
 @router.get("/admin", response_model=List[ProductAdmin])
-async def get_admin_products():
+async def get_admin_products(
+    authorized: bool = Depends(verify_admin_token),
+):
     """
     Devuelve productos administrativos desde MongoDB Atlas.
 
-    Este endpoint todavía es demo.
-    Después debe protegerse con autenticación.
+    Este endpoint requiere x-admin-token.
     """
     return await get_admin_products_from_db()
 
