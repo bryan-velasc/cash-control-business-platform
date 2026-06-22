@@ -60,6 +60,87 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
+  Future<void> _openStockDialog(ProductModel product) async {
+  final controller = TextEditingController(
+    text: product.stock.toString(),
+  );
+
+  final newStock = await showDialog<int>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF181820),
+        title: const Text(
+          'Ajustar stock',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            labelText: 'Nuevo stock',
+            labelStyle: TextStyle(color: Colors.white70),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amberAccent,
+              foregroundColor: Colors.black,
+            ),
+            onPressed: () {
+              final value = int.tryParse(controller.text.trim());
+
+              if (value == null || value < 0) {
+                return;
+              }
+
+              Navigator.pop(context, value);
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
+      );
+    },
+  );
+
+  controller.dispose();
+
+  if (newStock == null) {
+    return;
+  }
+
+  try {
+    await ProductService.updateProductStock(
+      id: product.id,
+      stock: newStock,
+    );
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Stock actualizado correctamente'),
+      ),
+    );
+
+    await _loadProducts();
+  } catch (error) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error al actualizar stock: $error'),
+      ),
+    );
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,14 +344,27 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ],
                   ),
                 ),
-                Icon(
-                  product.activo
-                      ? Icons.check_circle_rounded
-                      : Icons.cancel_rounded,
-                  color: product.activo
-                      ? Colors.greenAccent
-                      : Colors.redAccent,
-                ),
+                Column(
+  children: [
+    Icon(
+      product.activo
+          ? Icons.check_circle_rounded
+          : Icons.cancel_rounded,
+      color: product.activo
+          ? Colors.greenAccent
+          : Colors.redAccent,
+    ),
+    const SizedBox(height: 8),
+    IconButton(
+      tooltip: 'Ajustar stock',
+      onPressed: () => _openStockDialog(product),
+      icon: const Icon(
+        Icons.warehouse_rounded,
+        color: Colors.amberAccent,
+      ),
+    ),
+  ],
+),
               ],
             ),
           );

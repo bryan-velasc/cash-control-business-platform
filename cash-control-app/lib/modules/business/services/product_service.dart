@@ -144,4 +144,42 @@ class ProductService {
       'Error ${response.statusCode}: ${response.body}',
     );
   }
+  static Future<ProductModel> updateProductStock({
+  required int id,
+  required int stock,
+}) async {
+  final response = await http.patch(
+    Uri.parse('${ApiConfig.baseUrl}/products/stock/$id'),
+    headers: ApiConfig.adminHeaders,
+    body: jsonEncode({
+      'stock': stock,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    return ProductModel.fromJson(
+      jsonDecode(response.body),
+    );
+  }
+
+  throw Exception(
+    'Error ${response.statusCode}: ${response.body}',
+  );
+}
+
+  static Future<List<ProductModel>> getLowStockProducts() async {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/products/stock/low'),
+      headers: ApiConfig.adminHeaders,
+    );
+
+    final data = _decodeResponse(response);
+
+    if (data is List) {
+      return data
+          .map((item) => ProductModel.fromJson(Map<String, dynamic>.from(item)))
+          .toList();
+    }
+
+    throw Exception('La API no devolvió productos con stock bajo.');
 }
