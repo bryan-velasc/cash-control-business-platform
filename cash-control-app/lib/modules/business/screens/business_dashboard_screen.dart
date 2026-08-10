@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'products_screen.dart';
 import 'inventory_screen.dart';
+import 'customers_screen.dart';
 
 class BusinessDashboardScreen extends StatelessWidget {
   const BusinessDashboardScreen({super.key});
@@ -9,14 +10,13 @@ class BusinessDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mi Negocio'),
-      ),
+      appBar: AppBar(title: const Text('Mi Negocio')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           const _BusinessIntroCard(),
           const SizedBox(height: 16),
+
           _BusinessMenuCard(
             title: 'Productos',
             subtitle: 'Administra catálogo, precios y stock.',
@@ -24,12 +24,11 @@ class BusinessDashboardScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const ProductsScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const ProductsScreen()),
               );
             },
           ),
+
           _BusinessMenuCard(
             title: 'Inventario',
             subtitle: 'Registra entradas, salidas y ajustes.',
@@ -37,18 +36,23 @@ class BusinessDashboardScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const InventoryScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const InventoryScreen()),
               );
             },
           ),
+
           _BusinessMenuCard(
             title: 'Clientes',
             subtitle: 'Controla clientes y datos de contacto.',
             icon: Icons.people_alt_outlined,
-            onTap: () => _showPending(context, 'Clientes'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CustomersScreen()),
+              );
+            },
           ),
+
           _BusinessMenuCard(
             title: 'Fiados',
             subtitle: 'Consulta deudas, abonos y saldos pendientes.',
@@ -62,9 +66,7 @@ class BusinessDashboardScreen extends StatelessWidget {
 
   void _showPending(BuildContext context, String module) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$module se implementará en la siguiente fase.'),
-      ),
+      SnackBar(content: Text('$module se implementará en la siguiente fase.')),
     );
   }
 }
@@ -81,21 +83,16 @@ class _BusinessIntroCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.business_center_outlined,
-              size: 42,
-            ),
+            Icon(Icons.business_center_outlined, size: 42),
             SizedBox(height: 12),
             Text(
               'Panel Mi Negocio',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
-              'Este módulo conectará Cash Control con productos, inventario, clientes, fiados y abonos.',
+              'Administra productos, inventario, clientes, '
+              'fiados y abonos desde un solo lugar.',
             ),
           ],
         ),
@@ -120,15 +117,11 @@ class _BusinessMenuCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        leading: Icon(icon, size: 28),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
       ),
