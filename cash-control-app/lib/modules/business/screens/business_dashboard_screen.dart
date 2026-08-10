@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'products_screen.dart';
 import 'inventory_screen.dart';
+import 'sales_screen.dart';
 import 'customers_screen.dart';
 import 'credits_screen.dart';
 
@@ -38,6 +39,18 @@ class BusinessDashboardScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const InventoryScreen()),
+              );
+            },
+          ),
+
+          _BusinessMenuCard(
+            title: 'Ventas / Caja',
+            subtitle: 'Registra ventas, cobros y consulta utilidades.',
+            icon: Icons.point_of_sale_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SalesScreen()),
               );
             },
           ),
@@ -91,8 +104,8 @@ class _BusinessIntroCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Administra productos, inventario, clientes, '
-              'fiados y abonos desde un solo lugar.',
+              'Administra productos, inventario, ventas, caja, '
+              'clientes, fiados y abonos desde un solo lugar.',
             ),
           ],
         ),
