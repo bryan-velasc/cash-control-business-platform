@@ -1,4 +1,4 @@
-﻿class StockMovementModel {
+class StockMovementModel {
   final int movementId;
   final int productId;
   final String productoNombre;

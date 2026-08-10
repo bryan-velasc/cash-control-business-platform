@@ -14,6 +14,7 @@ class CustomersScreen extends StatefulWidget {
 class _CustomersScreenState extends State<CustomersScreen> {
   bool _loading = true;
   String? _error;
+
   List<CustomerModel> _customers = [];
 
   @override
@@ -23,10 +24,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
   }
 
   Future<void> _loadCustomers() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _error = null;
+      });
+    }
 
     try {
       final customers = await CustomerService.getCustomers();
@@ -48,7 +51,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
   }
 
   Future<void> _openForm({CustomerModel? customer}) async {
-    final changed = await Navigator.push(
+    final changed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (_) => CustomerFormScreen(customer: customer)),
     );
@@ -72,9 +75,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
       if (!mounted) return;
 
-      Navigator.pop(context);
+      Navigator.of(context).pop();
 
-      showDialog(
+      await showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
           title: Text(summary.nombre),
@@ -82,22 +85,27 @@ class _CustomersScreenState extends State<CustomersScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (summary.telefono != null)
+              if (summary.telefono != null && summary.telefono!.isNotEmpty)
                 Text('Teléfono: ${summary.telefono}'),
+
               const SizedBox(height: 16),
+
               _summaryRow('Total fiado', summary.totalFiado),
+
               _summaryRow('Total pagado', summary.totalPagado),
+
               _summaryRow('Saldo pendiente', summary.saldoPendiente),
+
               const SizedBox(height: 8),
-              Text(
-                'Créditos activos: '
-                '${summary.creditosActivos}',
-              ),
+
+              Text('Créditos activos: ${summary.creditosActivos}'),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Cerrar'),
             ),
           ],
@@ -106,7 +114,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
     } catch (error) {
       if (!mounted) return;
 
-      Navigator.pop(context);
+      Navigator.of(context).pop();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('No se pudo obtener el resumen: $error')),
@@ -136,17 +144,18 @@ class _CustomersScreenState extends State<CustomersScreen> {
           context: context,
           builder: (_) => AlertDialog(
             title: const Text('Desactivar cliente'),
-            content: Text(
-              '¿Deseas desactivar a '
-              '${customer.nombre}?',
-            ),
+            content: Text('¿Deseas desactivar a ${customer.nombre}?'),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context, false),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
                 child: const Text('Cancelar'),
               ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
                 child: const Text('Desactivar'),
               ),
             ],
@@ -186,13 +195,16 @@ class _CustomersScreenState extends State<CustomersScreen> {
         backgroundColor: const Color(0xFF181820),
         actions: [
           IconButton(
+            tooltip: 'Actualizar',
             onPressed: _loadCustomers,
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _openForm(),
+        onPressed: () {
+          _openForm();
+        },
         icon: const Icon(Icons.person_add),
         label: const Text('Nuevo cliente'),
       ),
@@ -216,9 +228,10 @@ class _CustomersScreenState extends State<CustomersScreen> {
               const SizedBox(height: 12),
               Text(_error!, textAlign: TextAlign.center),
               const SizedBox(height: 14),
-              ElevatedButton(
+              FilledButton.icon(
                 onPressed: _loadCustomers,
-                child: const Text('Reintentar'),
+                icon: const Icon(Icons.refresh),
+                label: const Text('Reintentar'),
               ),
             ],
           ),
@@ -230,6 +243,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
       return RefreshIndicator(
         onRefresh: _loadCustomers,
         child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: const [
             SizedBox(height: 180),
             Icon(Icons.people_outline, size: 64),
@@ -243,14 +257,18 @@ class _CustomersScreenState extends State<CustomersScreen> {
     return RefreshIndicator(
       onRefresh: _loadCustomers,
       child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 90),
         itemCount: _customers.length,
         itemBuilder: (context, index) {
-          final customer = _customers[index];
+          final CustomerModel customer = _customers[index];
 
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
+              onTap: () {
+                _showSummary(customer);
+              },
               leading: CircleAvatar(
                 child: Text(
                   customer.nombre.isEmpty
@@ -270,9 +288,11 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 children: [
                   if (customer.alias != null && customer.alias!.isNotEmpty)
                     Text('Alias: ${customer.alias}'),
+
                   if (customer.telefono != null &&
                       customer.telefono!.isNotEmpty)
                     Text('Tel: ${customer.telefono}'),
+
                   Text(
                     customer.activo ? 'Activo' : 'Inactivo',
                     style: TextStyle(
@@ -298,15 +318,27 @@ class _CustomersScreenState extends State<CustomersScreen> {
                   }
                 },
                 itemBuilder: (_) => [
-                  const PopupMenuItem(
+                  const PopupMenuItem<String>(
                     value: 'summary',
-                    child: Text('Ver resumen'),
+                    child: ListTile(
+                      leading: Icon(Icons.account_balance_wallet_outlined),
+                      title: Text('Ver resumen'),
+                    ),
                   ),
-                  const PopupMenuItem(value: 'edit', child: Text('Editar')),
+                  const PopupMenuItem<String>(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: Icon(Icons.edit_outlined),
+                      title: Text('Editar'),
+                    ),
+                  ),
                   if (customer.activo)
-                    const PopupMenuItem(
+                    const PopupMenuItem<String>(
                       value: 'deactivate',
-                      child: Text('Desactivar'),
+                      child: ListTile(
+                        leading: Icon(Icons.person_off_outlined),
+                        title: Text('Desactivar'),
+                      ),
                     ),
                 ],
               ),

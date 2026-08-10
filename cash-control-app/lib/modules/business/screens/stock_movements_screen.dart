@@ -6,18 +6,13 @@ import '../services/inventory_service.dart';
 class StockMovementsScreen extends StatefulWidget {
   final int? productId;
 
-  const StockMovementsScreen({
-    super.key,
-    this.productId,
-  });
+  const StockMovementsScreen({super.key, this.productId});
 
   @override
-  State<StockMovementsScreen> createState() =>
-      _StockMovementsScreenState();
+  State<StockMovementsScreen> createState() => _StockMovementsScreenState();
 }
 
-class _StockMovementsScreenState
-    extends State<StockMovementsScreen> {
+class _StockMovementsScreenState extends State<StockMovementsScreen> {
   bool _loading = true;
   String? _error;
 
@@ -36,8 +31,7 @@ class _StockMovementsScreenState
     });
 
     try {
-      final movements =
-          await InventoryService.getHistory(
+      final movements = await InventoryService.getHistory(
         productId: widget.productId,
       );
 
@@ -91,97 +85,52 @@ class _StockMovementsScreenState
         title: const Text('Historial de inventario'),
         backgroundColor: const Color(0xFF181820),
         actions: [
-          IconButton(
-            onPressed: _load,
-            icon: const Icon(
-              Icons.refresh_rounded,
-            ),
-          ),
+          IconButton(onPressed: _load, icon: const Icon(Icons.refresh_rounded)),
         ],
       ),
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(
-                  child: Text(
-                    _error!,
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              : _movements.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No hay movimientos registrados.',
-                      ),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: _load,
-                      child: ListView.builder(
-                        padding:
-                            const EdgeInsets.all(16),
-                        itemCount:
-                            _movements.length,
-                        itemBuilder:
-                            (context, index) {
-                          final movement =
-                              _movements[index];
+          ? Center(child: Text(_error!, textAlign: TextAlign.center))
+          : _movements.isEmpty
+          ? const Center(child: Text('No hay movimientos registrados.'))
+          : RefreshIndicator(
+              onRefresh: _load,
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _movements.length,
+                itemBuilder: (context, index) {
+                  final movement = _movements[index];
 
-                          final color =
-                              _colorForType(
-                            movement.tipo,
-                          );
+                  final color = _colorForType(movement.tipo);
 
-                          return Card(
-                            margin:
-                                const EdgeInsets.only(
-                              bottom: 12,
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                _iconForType(
-                                  movement.tipo,
-                                ),
-                                color: color,
-                              ),
-                              title: Text(
-                                movement
-                                    .productoNombre,
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                children: [
-                                  Text(
-                                    '${movement.tipo.toUpperCase()} · ${movement.motivo}',
-                                  ),
-                                  Text(
-                                    'Stock: ${movement.stockAnterior} → ${movement.stockNuevo}',
-                                  ),
-                                  if (movement
-                                          .referencia !=
-                                      null)
-                                    Text(
-                                      'Ref: ${movement.referencia}',
-                                    ),
-                                  Text(
-                                    movement.createdAt
-                                        .toLocal()
-                                        .toString(),
-                                    style:
-                                        const TextStyle(
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: ListTile(
+                      leading: Icon(_iconForType(movement.tipo), color: color),
+                      title: Text(movement.productoNombre),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${movement.tipo.toUpperCase()} · ${movement.motivo}',
+                          ),
+                          Text(
+                            'Stock: ${movement.stockAnterior} → ${movement.stockNuevo}',
+                          ),
+                          if (movement.referencia != null)
+                            Text('Ref: ${movement.referencia}'),
+                          Text(
+                            movement.createdAt.toLocal().toString(),
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        ],
                       ),
                     ),
+                  );
+                },
+              ),
+            ),
     );
   }
 }

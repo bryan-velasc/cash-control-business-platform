@@ -1,4 +1,4 @@
-﻿class CreditModel {
+class CreditModel {
   final int creditId;
   final int customerId;
   final String customerNombre;

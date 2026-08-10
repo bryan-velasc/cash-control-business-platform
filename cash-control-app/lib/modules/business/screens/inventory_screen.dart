@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
@@ -8,17 +7,13 @@ import 'inventory_adjust_screen.dart';
 import 'stock_movements_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
-  const InventoryScreen({
-    super.key,
-  });
+  const InventoryScreen({super.key});
 
   @override
-  State<InventoryScreen> createState() =>
-      _InventoryScreenState();
+  State<InventoryScreen> createState() => _InventoryScreenState();
 }
 
-class _InventoryScreenState
-    extends State<InventoryScreen> {
+class _InventoryScreenState extends State<InventoryScreen> {
   bool _loading = true;
   String? _error;
 
@@ -46,10 +41,8 @@ class _InventoryScreenState
       if (!mounted) return;
 
       setState(() {
-        _products =
-            results[0] as List<ProductModel>;
-        _lowStock =
-            results[1] as List<ProductModel>;
+        _products = results[0] as List<ProductModel>;
+        _lowStock = results[1] as List<ProductModel>;
         _loading = false;
       });
     } catch (error) {
@@ -62,16 +55,11 @@ class _InventoryScreenState
     }
   }
 
-  Future<void> _adjust(
-    ProductModel product,
-  ) async {
+  Future<void> _adjust(ProductModel product) async {
     final changed = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-            InventoryAdjustScreen(
-          product: product,
-        ),
+        builder: (_) => InventoryAdjustScreen(product: product),
       ),
     );
 
@@ -80,24 +68,17 @@ class _InventoryScreenState
     }
   }
 
-  void _openHistory({
-    int? productId,
-  }) {
+  void _openHistory({int? productId}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-            StockMovementsScreen(
-          productId: productId,
-        ),
+        builder: (_) => StockMovementsScreen(productId: productId),
       ),
     );
   }
 
   bool _isLow(ProductModel product) {
-    return _lowStock.any(
-      (item) => item.id == product.id,
-    );
+    return _lowStock.any((item) => item.id == product.id);
   }
 
   @override
@@ -110,116 +91,79 @@ class _InventoryScreenState
         actions: [
           IconButton(
             tooltip: 'Historial',
-            onPressed: () =>
-                _openHistory(),
-            icon: const Icon(
-              Icons.history_rounded,
-            ),
+            onPressed: () => _openHistory(),
+            icon: const Icon(Icons.history_rounded),
           ),
           IconButton(
             tooltip: 'Actualizar',
             onPressed: _load,
-            icon: const Icon(
-              Icons.refresh_rounded,
-            ),
+            icon: const Icon(Icons.refresh_rounded),
           ),
         ],
       ),
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.all(20),
-                    child: Text(
-                      _error!,
-                      textAlign:
-                          TextAlign.center,
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(_error!, textAlign: TextAlign.center),
+              ),
+            )
+          : RefreshIndicator(
+              onRefresh: _load,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _InventorySummary(
+                    totalProducts: _products.length,
+                    lowStock: _lowStock.length,
+                    totalUnits: _products.fold<int>(
+                      0,
+                      (total, product) => total + product.stock,
                     ),
                   ),
-                )
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  child: ListView(
-                    padding:
-                        const EdgeInsets.all(16),
-                    children: [
-                      _InventorySummary(
-                        totalProducts:
-                            _products.length,
-                        lowStock:
-                            _lowStock.length,
-                        totalUnits:
-                            _products.fold<int>(
-                          0,
-                          (total, product) =>
-                              total +
-                              product.stock,
-                        ),
+                  const SizedBox(height: 18),
+                  if (_lowStock.isNotEmpty) ...[
+                    const Text(
+                      'Stock bajo',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 18),
-                      if (_lowStock.isNotEmpty) ...[
-                        const Text(
-                          'Stock bajo',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight:
-                                FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        ..._lowStock.map(
-                          (product) =>
-                              _ProductStockCard(
-                            product: product,
-                            lowStock: true,
-                            onAdjust: () =>
-                                _adjust(product),
-                            onHistory: () =>
-                                _openHistory(
-                              productId:
-                                  product.id,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-                      const Text(
-                        'Todos los productos',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
+                    ),
+                    const SizedBox(height: 10),
+                    ..._lowStock.map(
+                      (product) => _ProductStockCard(
+                        product: product,
+                        lowStock: true,
+                        onAdjust: () => _adjust(product),
+                        onHistory: () => _openHistory(productId: product.id),
                       ),
-                      const SizedBox(height: 10),
-                      ..._products.map(
-                        (product) =>
-                            _ProductStockCard(
-                          product: product,
-                          lowStock:
-                              _isLow(product),
-                          onAdjust: () =>
-                              _adjust(product),
-                          onHistory: () =>
-                              _openHistory(
-                            productId:
-                                product.id,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                  const Text(
+                    'Todos los productos',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  ..._products.map(
+                    (product) => _ProductStockCard(
+                      product: product,
+                      lowStock: _isLow(product),
+                      onAdjust: () => _adjust(product),
+                      onHistory: () => _openHistory(productId: product.id),
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
 
-class _InventorySummary
-    extends StatelessWidget {
+class _InventorySummary extends StatelessWidget {
   final int totalProducts;
   final int lowStock;
   final int totalUnits;
@@ -238,8 +182,7 @@ class _InventorySummary
           child: _SummaryCard(
             label: 'Productos',
             value: totalProducts.toString(),
-            icon:
-                Icons.inventory_2_rounded,
+            icon: Icons.inventory_2_rounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -247,8 +190,7 @@ class _InventorySummary
           child: _SummaryCard(
             label: 'Stock bajo',
             value: lowStock.toString(),
-            icon:
-                Icons.warning_amber_rounded,
+            icon: Icons.warning_amber_rounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -256,8 +198,7 @@ class _InventorySummary
           child: _SummaryCard(
             label: 'Unidades',
             value: totalUnits.toString(),
-            icon:
-                Icons.warehouse_rounded,
+            icon: Icons.warehouse_rounded,
           ),
         ),
       ],
@@ -280,26 +221,16 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding:
-            const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(14),
         child: Column(
           children: [
             Icon(icon),
             const SizedBox(height: 6),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight:
-                    FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            Text(label, style: const TextStyle(fontSize: 12)),
           ],
         ),
       ),
@@ -307,8 +238,7 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-class _ProductStockCard
-    extends StatelessWidget {
+class _ProductStockCard extends StatelessWidget {
   final ProductModel product;
   final bool lowStock;
   final VoidCallback onAdjust;
@@ -324,24 +254,16 @@ class _ProductStockCard
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin:
-          const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
-        leading: CircleAvatar(
-          child: Text(
-            product.stock.toString(),
-          ),
-        ),
-        title: Text(
-          product.nombre,
-        ),
+        leading: CircleAvatar(child: Text(product.stock.toString())),
+        title: Text(product.nombre),
         subtitle: Text(
           lowStock
               ? 'Stock bajo · mínimo ${product.stockMinimo ?? 0}'
               : 'Stock disponible: ${product.stock}',
         ),
-        trailing:
-            PopupMenuButton<String>(
+        trailing: PopupMenuButton<String>(
           onSelected: (value) {
             if (value == 'adjust') {
               onAdjust();
@@ -352,18 +274,8 @@ class _ProductStockCard
             }
           },
           itemBuilder: (_) => const [
-            PopupMenuItem(
-              value: 'adjust',
-              child: Text(
-                'Registrar movimiento',
-              ),
-            ),
-            PopupMenuItem(
-              value: 'history',
-              child: Text(
-                'Ver historial',
-              ),
-            ),
+            PopupMenuItem(value: 'adjust', child: Text('Registrar movimiento')),
+            PopupMenuItem(value: 'history', child: Text('Ver historial')),
           ],
         ),
       ),

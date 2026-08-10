@@ -28,15 +28,21 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   void initState() {
     super.initState();
 
-    final customer = widget.customer;
+    _nombreController = TextEditingController(
+      text: widget.customer?.nombre ?? '',
+    );
 
-    _nombreController = TextEditingController(text: customer?.nombre ?? '');
+    _telefonoController = TextEditingController(
+      text: widget.customer?.telefono ?? '',
+    );
 
-    _telefonoController = TextEditingController(text: customer?.telefono ?? '');
+    _aliasController = TextEditingController(
+      text: widget.customer?.alias ?? '',
+    );
 
-    _aliasController = TextEditingController(text: customer?.alias ?? '');
-
-    _notasController = TextEditingController(text: customer?.notas ?? '');
+    _notasController = TextEditingController(
+      text: widget.customer?.notas ?? '',
+    );
   }
 
   @override
@@ -45,6 +51,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     _telefonoController.dispose();
     _aliasController.dispose();
     _notasController.dispose();
+
     super.dispose();
   }
 
@@ -61,22 +68,32 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
       if (_isEditing) {
         await CustomerService.updateCustomer(
           customerId: widget.customer!.customerId,
-          nombre: _nombreController.text,
-          telefono: _telefonoController.text,
-          alias: _aliasController.text,
-          notas: _notasController.text,
+          nombre: _nombreController.text.trim(),
+          telefono: _telefonoController.text.trim(),
+          alias: _aliasController.text.trim(),
+          notas: _notasController.text.trim(),
           activo: widget.customer!.activo,
         );
       } else {
         await CustomerService.createCustomer(
-          nombre: _nombreController.text,
-          telefono: _telefonoController.text,
-          alias: _aliasController.text,
-          notas: _notasController.text,
+          nombre: _nombreController.text.trim(),
+          telefono: _telefonoController.text.trim(),
+          alias: _aliasController.text.trim(),
+          notas: _notasController.text.trim(),
         );
       }
 
       if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            _isEditing
+                ? 'Cliente actualizado correctamente'
+                : 'Cliente creado correctamente',
+          ),
+        ),
+      );
 
       Navigator.pop(context, true);
     } catch (error) {
@@ -113,9 +130,10 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 children: [
                   TextFormField(
                     controller: _nombreController,
+                    textCapitalization: TextCapitalization.words,
                     decoration: const InputDecoration(
                       labelText: 'Nombre',
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: Icon(Icons.person_outline),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
@@ -126,49 +144,59 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                       return null;
                     },
                   ),
+
                   const SizedBox(height: 16),
+
                   TextFormField(
                     controller: _telefonoController,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                       labelText: 'Teléfono',
-                      prefixIcon: Icon(Icons.phone),
+                      prefixIcon: Icon(Icons.phone_outlined),
                       border: OutlineInputBorder(),
                     ),
                   ),
+
                   const SizedBox(height: 16),
+
                   TextFormField(
                     controller: _aliasController,
                     decoration: const InputDecoration(
                       labelText: 'Alias',
-                      prefixIcon: Icon(Icons.badge),
+                      hintText: 'Ej. Juan trabajo',
+                      prefixIcon: Icon(Icons.badge_outlined),
                       border: OutlineInputBorder(),
                     ),
                   ),
+
                   const SizedBox(height: 16),
+
                   TextFormField(
                     controller: _notasController,
                     maxLines: 4,
                     decoration: const InputDecoration(
                       labelText: 'Notas',
-                      prefixIcon: Icon(Icons.notes),
+                      hintText: 'Información adicional del cliente...',
+                      prefixIcon: Icon(Icons.notes_outlined),
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(),
                     ),
                   ),
+
                   const SizedBox(height: 24),
+
                   SizedBox(
                     width: double.infinity,
                     height: 52,
-                    child: ElevatedButton.icon(
+                    child: FilledButton.icon(
                       onPressed: _saving ? null : _save,
                       icon: _saving
                           ? const SizedBox(
-                              width: 18,
-                              height: 18,
+                              width: 20,
+                              height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Icon(Icons.save),
+                          : const Icon(Icons.save_outlined),
                       label: Text(
                         _saving
                             ? 'Guardando...'

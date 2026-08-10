@@ -146,8 +146,6 @@ class CreditService {
       return body;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

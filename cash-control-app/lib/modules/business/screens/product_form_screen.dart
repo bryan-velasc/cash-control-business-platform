@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
 import '../services/product_service.dart';
@@ -6,10 +6,7 @@ import '../services/product_service.dart';
 class ProductFormScreen extends StatefulWidget {
   final ProductModel? product;
 
-  const ProductFormScreen({
-    super.key,
-    this.product,
-  });
+  const ProductFormScreen({super.key, this.product});
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -38,9 +35,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     final product = widget.product;
 
-    _nombreController = TextEditingController(
-      text: product?.nombre ?? '',
-    );
+    _nombreController = TextEditingController(text: product?.nombre ?? '');
     _categoriaController = TextEditingController(
       text: product?.categoria ?? '',
     );
@@ -56,16 +51,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       text: product == null ? '' : product.stock.toString(),
     );
     _stockMinimoController = TextEditingController(
-      text: product?.stockMinimo == null
-          ? ''
-          : product!.stockMinimo.toString(),
+      text: product?.stockMinimo == null ? '' : product!.stockMinimo.toString(),
     );
     _proveedorController = TextEditingController(
       text: product?.proveedor ?? '',
     );
-    _imagenController = TextEditingController(
-      text: product?.imagen ?? '',
-    );
+    _imagenController = TextEditingController(text: product?.imagen ?? '');
 
     _activo = product?.activo ?? true;
   }
@@ -157,9 +148,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al guardar producto: $error'),
-        ),
+        SnackBar(content: Text('Error al guardar producto: $error')),
       );
     } finally {
       if (mounted) {
@@ -183,9 +172,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       return 'Campo obligatorio';
     }
 
-    final number = double.tryParse(
-      value.trim().replaceAll(',', '.'),
-    );
+    final number = double.tryParse(value.trim().replaceAll(',', '.'));
 
     if (number == null) {
       return 'Ingresa un número válido';
@@ -203,9 +190,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       return null;
     }
 
-    final number = double.tryParse(
-      value.trim().replaceAll(',', '.'),
-    );
+    final number = double.tryParse(value.trim().replaceAll(',', '.'));
 
     if (number == null) {
       return 'Ingresa un número válido';
@@ -363,17 +348,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.save_rounded),
                   label: Text(
                     _isSaving
                         ? 'Guardando...'
                         : _isEditing
-                            ? 'Actualizar producto'
-                            : 'Guardar producto',
+                        ? 'Actualizar producto'
+                        : 'Guardar producto',
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amberAccent,
@@ -406,32 +389,21 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: Icon(
-          icon,
-          color: Colors.amberAccent,
-        ),
+        prefixIcon: Icon(icon, color: Colors.amberAccent),
         filled: true,
         fillColor: const Color(0xFF181820),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.white12,
-          ),
+          borderSide: const BorderSide(color: Colors.white12),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.amberAccent,
-          ),
+          borderSide: const BorderSide(color: Colors.amberAccent),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.redAccent,
-          ),
+          borderSide: const BorderSide(color: Colors.redAccent),
         ),
       ),
     );

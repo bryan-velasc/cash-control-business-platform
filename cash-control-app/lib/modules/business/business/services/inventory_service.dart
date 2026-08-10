@@ -36,9 +36,7 @@ class InventoryService {
     int? productId,
     int limit = 100,
   }) async {
-    final queryParameters = <String, String>{
-      'limit': limit.toString(),
-    };
+    final queryParameters = <String, String>{'limit': limit.toString()};
 
     if (productId != null) {
       queryParameters['product_id'] = productId.toString();
@@ -46,14 +44,9 @@ class InventoryService {
 
     final uri = Uri.parse(
       '${ApiConfig.baseUrl}/inventory/stock/history',
-    ).replace(
-      queryParameters: queryParameters,
-    );
+    ).replace(queryParameters: queryParameters);
 
-    final response = await http.get(
-      uri,
-      headers: ApiConfig.adminHeaders,
-    );
+    final response = await http.get(uri, headers: ApiConfig.adminHeaders);
 
     final data = _decodeResponse(response);
 
@@ -104,8 +97,6 @@ class InventoryService {
       return body;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

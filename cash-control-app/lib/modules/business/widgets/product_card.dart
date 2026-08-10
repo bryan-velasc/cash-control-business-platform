@@ -50,9 +50,7 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       product.categoria,
-                      style: TextStyle(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                      style: TextStyle(color: colorScheme.onSurfaceVariant),
                     ),
                     const SizedBox(height: 10),
                     Wrap(
@@ -103,14 +101,8 @@ class ProductCard extends StatelessWidget {
                 },
                 itemBuilder: (context) {
                   return const [
-                    PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
-                    PopupMenuItem(
-                      value: 'stock',
-                      child: Text('Ajustar stock'),
-                    ),
+                    PopupMenuItem(value: 'edit', child: Text('Editar')),
+                    PopupMenuItem(value: 'stock', child: Text('Ajustar stock')),
                   ];
                 },
               ),
@@ -125,9 +117,7 @@ class ProductCard extends StatelessWidget {
 class _ProductImage extends StatelessWidget {
   final String imagePath;
 
-  const _ProductImage({
-    required this.imagePath,
-  });
+  const _ProductImage({required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -170,9 +160,7 @@ class _ProductImage extends StatelessWidget {
 class _PlaceholderImage extends StatelessWidget {
   final ColorScheme colorScheme;
 
-  const _PlaceholderImage({
-    required this.colorScheme,
-  });
+  const _PlaceholderImage({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +194,9 @@ class _InfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).colorScheme.surfaceContainerHighest;
+    Color backgroundColor = Theme.of(
+      context,
+    ).colorScheme.surfaceContainerHighest;
     Color foregroundColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
     if (isWarning) {
@@ -228,11 +218,7 @@ class _InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 15,
-            color: foregroundColor,
-          ),
+          Icon(icon, size: 15, color: foregroundColor),
           const SizedBox(width: 4),
           Text(
             label,

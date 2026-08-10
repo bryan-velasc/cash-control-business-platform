@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
@@ -15,14 +15,10 @@ class ProductService {
     if (response.statusCode == 200) {
       final List data = jsonDecode(response.body);
 
-      return data
-          .map((item) => ProductModel.fromJson(item))
-          .toList();
+      return data.map((item) => ProductModel.fromJson(item)).toList();
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<List<ProductModel>> getAdminProducts() async {
@@ -34,14 +30,10 @@ class ProductService {
     if (response.statusCode == 200) {
       final List data = jsonDecode(response.body);
 
-      return data
-          .map((item) => ProductModel.fromJson(item))
-          .toList();
+      return data.map((item) => ProductModel.fromJson(item)).toList();
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<ProductModel> createProduct({
@@ -72,14 +64,10 @@ class ProductService {
     );
 
     if (response.statusCode == 201) {
-      return ProductModel.fromJson(
-        jsonDecode(response.body),
-      );
+      return ProductModel.fromJson(jsonDecode(response.body));
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<ProductModel> updateProduct({
@@ -111,14 +99,10 @@ class ProductService {
     );
 
     if (response.statusCode == 200) {
-      return ProductModel.fromJson(
-        jsonDecode(response.body),
-      );
+      return ProductModel.fromJson(jsonDecode(response.body));
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<ProductModel> updateProductStock({
@@ -128,20 +112,14 @@ class ProductService {
     final response = await http.patch(
       Uri.parse('${ApiConfig.baseUrl}/products/stock/$id'),
       headers: ApiConfig.adminHeaders,
-      body: jsonEncode({
-        'stock': stock,
-      }),
+      body: jsonEncode({'stock': stock}),
     );
 
     if (response.statusCode == 200) {
-      return ProductModel.fromJson(
-        jsonDecode(response.body),
-      );
+      return ProductModel.fromJson(jsonDecode(response.body));
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<void> deleteProduct(int id) async {
@@ -154,8 +132,6 @@ class ProductService {
       return;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

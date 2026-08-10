@@ -18,7 +18,9 @@ class CustomerService {
 
     if (data is List) {
       return data
-          .map((item) => CustomerModel.fromJson(Map<String, dynamic>.from(item)))
+          .map(
+            (item) => CustomerModel.fromJson(Map<String, dynamic>.from(item)),
+          )
           .toList();
     }
 
@@ -92,8 +94,6 @@ class CustomerService {
       return body;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

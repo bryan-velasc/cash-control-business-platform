@@ -68,9 +68,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Producto creado correctamente'),
-        ),
+        const SnackBar(content: Text('Producto creado correctamente')),
       );
 
       Navigator.pop(context, true);
@@ -78,9 +76,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al crear producto: $error'),
-        ),
+        SnackBar(content: Text('Error al crear producto: $error')),
       );
     } finally {
       if (mounted) {
@@ -274,14 +270,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.save_rounded),
-                  label: Text(
-                    _isSaving ? 'Guardando...' : 'Guardar producto',
-                  ),
+                  label: Text(_isSaving ? 'Guardando...' : 'Guardar producto'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amberAccent,
                     foregroundColor: Colors.black,
@@ -313,32 +305,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: Icon(
-          icon,
-          color: Colors.amberAccent,
-        ),
+        prefixIcon: Icon(icon, color: Colors.amberAccent),
         filled: true,
         fillColor: const Color(0xFF181820),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.white12,
-          ),
+          borderSide: const BorderSide(color: Colors.white12),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.amberAccent,
-          ),
+          borderSide: const BorderSide(color: Colors.amberAccent),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.redAccent,
-          ),
+          borderSide: const BorderSide(color: Colors.redAccent),
         ),
       ),
     );

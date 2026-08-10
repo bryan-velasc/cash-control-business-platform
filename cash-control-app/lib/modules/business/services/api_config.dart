@@ -19,15 +19,10 @@ class ApiConfig {
   static const String adminToken = 'cama_75_pol_*';
 
   static Map<String, String> get adminHeaders {
-    return {
-      'Content-Type': 'application/json',
-      'x-admin-token': adminToken,
-    };
+    return {'Content-Type': 'application/json', 'x-admin-token': adminToken};
   }
 
   static Map<String, String> get publicHeaders {
-    return {
-      'Content-Type': 'application/json',
-    };
+    return {'Content-Type': 'application/json'};
   }
 }

@@ -6,18 +6,13 @@ import '../services/inventory_service.dart';
 class InventoryAdjustScreen extends StatefulWidget {
   final ProductModel product;
 
-  const InventoryAdjustScreen({
-    super.key,
-    required this.product,
-  });
+  const InventoryAdjustScreen({super.key, required this.product});
 
   @override
-  State<InventoryAdjustScreen> createState() =>
-      _InventoryAdjustScreenState();
+  State<InventoryAdjustScreen> createState() => _InventoryAdjustScreenState();
 }
 
-class _InventoryAdjustScreenState
-    extends State<InventoryAdjustScreen> {
+class _InventoryAdjustScreenState extends State<InventoryAdjustScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _cantidadController = TextEditingController();
@@ -48,37 +43,26 @@ class _InventoryAdjustScreenState
       await InventoryService.adjustStock(
         productId: widget.product.id,
         tipo: _tipo,
-        cantidad: int.parse(
-          _cantidadController.text.trim(),
-        ),
+        cantidad: int.parse(_cantidadController.text.trim()),
         motivo: _motivoController.text.trim(),
-        referencia:
-            _referenciaController.text.trim().isEmpty
-                ? null
-                : _referenciaController.text.trim(),
+        referencia: _referenciaController.text.trim().isEmpty
+            ? null
+            : _referenciaController.text.trim(),
       );
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Movimiento de inventario registrado',
-          ),
-        ),
+        const SnackBar(content: Text('Movimiento de inventario registrado')),
       );
 
       Navigator.pop(context, true);
     } catch (error) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error: $error',
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $error')));
     } finally {
       if (mounted) {
         setState(() {
@@ -113,15 +97,9 @@ class _InventoryAdjustScreenState
             children: [
               Card(
                 child: ListTile(
-                  leading: const Icon(
-                    Icons.inventory_2_rounded,
-                  ),
-                  title: Text(
-                    widget.product.nombre,
-                  ),
-                  subtitle: Text(
-                    'Stock actual: ${widget.product.stock}',
-                  ),
+                  leading: const Icon(Icons.inventory_2_rounded),
+                  title: Text(widget.product.nombre),
+                  subtitle: Text('Stock actual: ${widget.product.stock}'),
                 ),
               ),
               const SizedBox(height: 20),
@@ -132,14 +110,8 @@ class _InventoryAdjustScreenState
                   border: OutlineInputBorder(),
                 ),
                 items: const [
-                  DropdownMenuItem(
-                    value: 'entrada',
-                    child: Text('Entrada'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'salida',
-                    child: Text('Salida'),
-                  ),
+                  DropdownMenuItem(value: 'entrada', child: Text('Entrada')),
+                  DropdownMenuItem(value: 'salida', child: Text('Salida')),
                   DropdownMenuItem(
                     value: 'ajuste',
                     child: Text('Ajuste manual'),
@@ -162,9 +134,7 @@ class _InventoryAdjustScreenState
                   border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  final amount = int.tryParse(
-                    value?.trim() ?? '',
-                  );
+                  final amount = int.tryParse(value?.trim() ?? '');
 
                   if (amount == null || amount < 0) {
                     return 'Ingresa una cantidad válida';
@@ -178,13 +148,11 @@ class _InventoryAdjustScreenState
                 controller: _motivoController,
                 decoration: const InputDecoration(
                   labelText: 'Motivo',
-                  hintText:
-                      'Compra, venta, corrección, devolución...',
+                  hintText: 'Compra, venta, corrección, devolución...',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null ||
-                      value.trim().length < 3) {
+                  if (value == null || value.trim().length < 3) {
                     return 'Describe el motivo';
                   }
 
@@ -196,8 +164,7 @@ class _InventoryAdjustScreenState
                 controller: _referenciaController,
                 decoration: const InputDecoration(
                   labelText: 'Referencia opcional',
-                  hintText:
-                      'Factura, pedido, venta, proveedor...',
+                  hintText: 'Factura, pedido, venta, proveedor...',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -211,17 +178,11 @@ class _InventoryAdjustScreenState
                       ? const SizedBox(
                           width: 18,
                           height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Icon(
-                          Icons.save_rounded,
-                        ),
+                      : const Icon(Icons.save_rounded),
                   label: Text(
-                    _saving
-                        ? 'Guardando...'
-                        : 'Registrar movimiento',
+                    _saving ? 'Guardando...' : 'Registrar movimiento',
                   ),
                 ),
               ),

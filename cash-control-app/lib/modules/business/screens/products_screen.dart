@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
 import '../services/product_service.dart';
@@ -47,16 +47,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
-  Future<void> _openProductForm({
-    ProductModel? product,
-  }) async {
+  Future<void> _openProductForm({ProductModel? product}) async {
     final changed = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => ProductFormScreen(
-          product: product,
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => ProductFormScreen(product: product)),
     );
 
     if (changed == true) {
@@ -65,9 +59,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> _openStockDialog(ProductModel product) async {
-    final controller = TextEditingController(
-      text: product.stock.toString(),
-    );
+    final controller = TextEditingController(text: product.stock.toString());
 
     final newStock = await showDialog<int>(
       context: context,
@@ -98,9 +90,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 foregroundColor: Colors.black,
               ),
               onPressed: () {
-                final value = int.tryParse(
-                  controller.text.trim(),
-                );
+                final value = int.tryParse(controller.text.trim());
 
                 if (value == null || value < 0) {
                   return;
@@ -122,17 +112,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
 
     try {
-      await ProductService.updateProductStock(
-        id: product.id,
-        stock: newStock,
-      );
+      await ProductService.updateProductStock(id: product.id, stock: newStock);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Stock actualizado correctamente'),
-        ),
+        const SnackBar(content: Text('Stock actualizado correctamente')),
       );
 
       await _loadProducts();
@@ -140,15 +125,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al actualizar stock: $error'),
-        ),
+        SnackBar(content: Text('Error al actualizar stock: $error')),
       );
     }
   }
 
   Future<void> _confirmDeactivate(ProductModel product) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
           context: context,
           builder: (context) {
             return AlertDialog(
@@ -191,9 +175,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Producto desactivado correctamente'),
-        ),
+        const SnackBar(content: Text('Producto desactivado correctamente')),
       );
 
       await _loadProducts();
@@ -201,9 +183,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al desactivar producto: $error'),
-        ),
+        SnackBar(content: Text('Error al desactivar producto: $error')),
       );
     }
   }
@@ -250,9 +230,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget _buildBody() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.amberAccent,
-        ),
+        child: CircularProgressIndicator(color: Colors.amberAccent),
       );
     }
 
@@ -281,10 +259,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 8),
               Text(
                 _errorMessage!,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 18),
@@ -327,9 +302,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 8),
               const Text(
                 'Agrega tu primer producto para comenzar a manejar inventario.',
-                style: TextStyle(
-                  color: Colors.white70,
-                ),
+                style: TextStyle(color: Colors.white70),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 18),
@@ -381,18 +354,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     product.activo
                         ? Icons.inventory_2_rounded
                         : Icons.inventory_2_outlined,
-                    color: product.activo
-                        ? Colors.amberAccent
-                        : Colors.white38,
+                    color: product.activo ? Colors.amberAccent : Colors.white38,
                     size: 30,
                   ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: InkWell(
-                    onTap: () => _openProductForm(
-                      product: product,
-                    ),
+                    onTap: () => _openProductForm(product: product),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -459,9 +428,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   color: const Color(0xFF242430),
                   onSelected: (value) {
                     if (value == 'edit') {
-                      _openProductForm(
-                        product: product,
-                      );
+                      _openProductForm(product: product);
                     }
 
                     if (value == 'stock') {

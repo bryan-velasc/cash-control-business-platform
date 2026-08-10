@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'products_screen.dart';
 import 'inventory_screen.dart';
 import 'customers_screen.dart';
+import 'credits_screen.dart';
 
 class BusinessDashboardScreen extends StatelessWidget {
   const BusinessDashboardScreen({super.key});
@@ -57,16 +58,15 @@ class BusinessDashboardScreen extends StatelessWidget {
             title: 'Fiados',
             subtitle: 'Consulta deudas, abonos y saldos pendientes.',
             icon: Icons.receipt_long_outlined,
-            onTap: () => _showPending(context, 'Fiados'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CreditsScreen()),
+              );
+            },
           ),
         ],
       ),
-    );
-  }
-
-  void _showPending(BuildContext context, String module) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$module se implementará en la siguiente fase.')),
     );
   }
 }

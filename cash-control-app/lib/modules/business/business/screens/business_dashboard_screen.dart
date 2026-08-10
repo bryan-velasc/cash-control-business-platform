@@ -8,9 +8,7 @@ class BusinessDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mi Negocio'),
-      ),
+      appBar: AppBar(title: const Text('Mi Negocio')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -23,9 +21,7 @@ class BusinessDashboardScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const ProductsScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const ProductsScreen()),
               );
             },
           ),
@@ -54,9 +50,7 @@ class BusinessDashboardScreen extends StatelessWidget {
 
   void _showPending(BuildContext context, String module) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$module se implementará en la siguiente fase.'),
-      ),
+      SnackBar(content: Text('$module se implementará en la siguiente fase.')),
     );
   }
 }
@@ -73,17 +67,11 @@ class _BusinessIntroCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.business_center_outlined,
-              size: 42,
-            ),
+            Icon(Icons.business_center_outlined, size: 42),
             SizedBox(height: 12),
             Text(
               'Panel Mi Negocio',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
@@ -115,12 +103,7 @@ class _BusinessMenuCard extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: Icon(icon),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
       ),

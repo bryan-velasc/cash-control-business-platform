@@ -87,9 +87,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   void _showPendingFeature(String feature) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature se implementará en la siguiente fase.'),
-      ),
+      SnackBar(content: Text('$feature se implementará en la siguiente fase.')),
     );
   }
 
@@ -144,10 +142,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             if (_isLoading)
               const _LoadingState()
             else if (_errorMessage != null)
-              _ErrorState(
-                message: _errorMessage!,
-                onRetry: _loadProducts,
-              )
+              _ErrorState(message: _errorMessage!, onRetry: _loadProducts)
             else if (_filteredProducts.isEmpty)
               const _EmptyState()
             else
@@ -184,18 +179,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              _DetailRow(
-                label: 'Categoría',
-                value: product.categoria,
-              ),
+              _DetailRow(label: 'Categoría', value: product.categoria),
               _DetailRow(
                 label: 'Precio venta',
                 value: '\$${product.precio.toStringAsFixed(2)}',
               ),
-              _DetailRow(
-                label: 'Stock',
-                value: product.stock.toString(),
-              ),
+              _DetailRow(label: 'Stock', value: product.stock.toString()),
               _DetailRow(
                 label: 'Estado',
                 value: product.activo ? 'Activo' : 'Inactivo',
@@ -206,10 +195,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   value: '\$${product.precioCompra!.toStringAsFixed(2)}',
                 ),
               if (product.proveedor != null)
-                _DetailRow(
-                  label: 'Proveedor',
-                  value: product.proveedor!,
-                ),
+                _DetailRow(label: 'Proveedor', value: product.proveedor!),
               if (product.stockMinimo != null)
                 _DetailRow(
                   label: 'Stock mínimo',
@@ -293,15 +279,9 @@ class _SummaryBox extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
           ),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 12),
-          ),
+          Text(title, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
@@ -315,9 +295,7 @@ class _LoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(top: 60),
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+      child: Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -326,10 +304,7 @@ class _ErrorState extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const _ErrorState({
-    required this.message,
-    required this.onRetry,
-  });
+  const _ErrorState({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -337,23 +312,14 @@ class _ErrorState extends StatelessWidget {
       padding: const EdgeInsets.only(top: 40),
       child: Column(
         children: [
-          const Icon(
-            Icons.error_outline,
-            size: 54,
-          ),
+          const Icon(Icons.error_outline, size: 54),
           const SizedBox(height: 12),
           const Text(
             'No se pudieron cargar los productos',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
           const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-          ),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: onRetry,
@@ -373,9 +339,7 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(top: 60),
-      child: Center(
-        child: Text('No hay productos para mostrar.'),
-      ),
+      child: Center(child: Text('No hay productos para mostrar.')),
     );
   }
 }
@@ -384,10 +348,7 @@ class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _DetailRow({
-    required this.label,
-    required this.value,
-  });
+  const _DetailRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -399,14 +360,10 @@ class _DetailRow extends StatelessWidget {
             width: 120,
             child: Text(
               '$label:',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            child: Text(value),
-          ),
+          Expanded(child: Text(value)),
         ],
       ),
     );

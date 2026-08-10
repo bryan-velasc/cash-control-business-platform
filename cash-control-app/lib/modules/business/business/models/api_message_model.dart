@@ -1,4 +1,4 @@
-﻿class ApiMessageModel {
+class ApiMessageModel {
   final String message;
   final int? productId;
   final int? customerId;

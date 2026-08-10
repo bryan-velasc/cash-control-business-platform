@@ -1,4 +1,4 @@
-﻿class CreditPaymentModel {
+class CreditPaymentModel {
   final int paymentId;
   final int creditId;
   final int customerId;

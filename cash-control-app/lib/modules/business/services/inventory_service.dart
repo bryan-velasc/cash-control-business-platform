@@ -16,9 +16,7 @@ class InventoryService {
     String? referencia,
   }) async {
     final response = await http.post(
-      Uri.parse(
-        '${ApiConfig.baseUrl}/inventory/stock/adjust/$productId',
-      ),
+      Uri.parse('${ApiConfig.baseUrl}/inventory/stock/adjust/$productId'),
       headers: ApiConfig.adminHeaders,
       body: jsonEncode({
         'tipo': tipo,
@@ -30,23 +28,17 @@ class InventoryService {
     );
 
     if (response.statusCode == 200) {
-      return StockMovementModel.fromJson(
-        jsonDecode(response.body),
-      );
+      return StockMovementModel.fromJson(jsonDecode(response.body));
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<List<StockMovementModel>> getHistory({
     int? productId,
     int limit = 100,
   }) async {
-    final params = <String, String>{
-      'limit': limit.toString(),
-    };
+    final params = <String, String>{'limit': limit.toString()};
 
     if (productId != null) {
       params['product_id'] = productId.toString();
@@ -54,40 +46,29 @@ class InventoryService {
 
     final uri = Uri.parse(
       '${ApiConfig.baseUrl}/inventory/stock/history',
-    ).replace(
-      queryParameters: params,
-    );
+    ).replace(queryParameters: params);
 
-    final response = await http.get(
-      uri,
-      headers: ApiConfig.adminHeaders,
-    );
+    final response = await http.get(uri, headers: ApiConfig.adminHeaders);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      final List movements =
-          data['movimientos'] as List? ?? [];
+      final List movements = data['movimientos'] as List? ?? [];
 
       return movements
           .map(
-            (item) => StockMovementModel.fromJson(
-              Map<String, dynamic>.from(item),
-            ),
+            (item) =>
+                StockMovementModel.fromJson(Map<String, dynamic>.from(item)),
           )
           .toList();
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 
   static Future<List<ProductModel>> getLowStockProducts() async {
     final response = await http.get(
-      Uri.parse(
-        '${ApiConfig.baseUrl}/inventory/stock/low',
-      ),
+      Uri.parse('${ApiConfig.baseUrl}/inventory/stock/low'),
       headers: ApiConfig.adminHeaders,
     );
 
@@ -95,16 +76,10 @@ class InventoryService {
       final List data = jsonDecode(response.body);
 
       return data
-          .map(
-            (item) => ProductModel.fromJson(
-              Map<String, dynamic>.from(item),
-            ),
-          )
+          .map((item) => ProductModel.fromJson(Map<String, dynamic>.from(item)))
           .toList();
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

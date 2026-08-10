@@ -1,4 +1,4 @@
-﻿class ProductModel {
+class ProductModel {
   final int id;
   final String nombre;
   final String categoria;

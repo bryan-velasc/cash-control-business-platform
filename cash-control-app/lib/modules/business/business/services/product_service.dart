@@ -38,7 +38,9 @@ class ProductService {
           .toList();
     }
 
-    throw Exception('La API no devolvió una lista de productos administrativos.');
+    throw Exception(
+      'La API no devolvió una lista de productos administrativos.',
+    );
   }
 
   static Future<ProductModel> getProductById(int productId) async {
@@ -86,9 +88,7 @@ class ProductService {
     final response = await http.patch(
       Uri.parse('${ApiConfig.baseUrl}/products/stock/$productId'),
       headers: ApiConfig.adminHeaders,
-      body: jsonEncode({
-        'stock': stock,
-      }),
+      body: jsonEncode({'stock': stock}),
     );
 
     final data = _decodeResponse(response);
@@ -114,8 +114,6 @@ class ProductService {
       return body;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    throw Exception('Error ${response.statusCode}: ${response.body}');
   }
 }

@@ -1,4 +1,4 @@
-﻿class CreditModel {
+class CreditModel {
   final int creditId;
   final int customerId;
   final String customerNombre;
@@ -6,13 +6,13 @@
   final double montoTotal;
   final double montoPagado;
   final double saldoPendiente;
+  final DateTime? fechaLimite;
   final String estado;
-  final String? fechaLimite;
   final String? notas;
   final String usuario;
   final bool activo;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   const CreditModel({
     required this.creditId,
@@ -22,61 +22,47 @@
     required this.montoTotal,
     required this.montoPagado,
     required this.saldoPendiente,
+    required this.fechaLimite,
     required this.estado,
-    this.fechaLimite,
-    this.notas,
+    required this.notas,
     required this.usuario,
     required this.activo,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory CreditModel.fromJson(Map<String, dynamic> json) {
     return CreditModel(
-      creditId: _toInt(json['credit_id']),
-      customerId: _toInt(json['customer_id']),
+      creditId: (json['credit_id'] as num).toInt(),
+      customerId: (json['customer_id'] as num).toInt(),
       customerNombre: json['customer_nombre']?.toString() ?? '',
       concepto: json['concepto']?.toString() ?? '',
-      montoTotal: _toDouble(json['monto_total']),
-      montoPagado: _toDouble(json['monto_pagado']),
-      saldoPendiente: _toDouble(json['saldo_pendiente']),
+      montoTotal: (json['monto_total'] as num).toDouble(),
+      montoPagado: (json['monto_pagado'] as num).toDouble(),
+      saldoPendiente: (json['saldo_pendiente'] as num).toDouble(),
+      fechaLimite: json['fecha_limite'] == null
+          ? null
+          : DateTime.tryParse(json['fecha_limite'].toString()),
       estado: json['estado']?.toString() ?? 'pendiente',
-      fechaLimite: json['fecha_limite']?.toString(),
       notas: json['notas']?.toString(),
-      usuario: json['usuario']?.toString() ?? '',
-      activo: json['activo'] == true,
-      createdAt: _toDateTime(json['created_at']),
-      updatedAt: _toDateTime(json['updated_at']),
+      usuario: json['usuario']?.toString() ?? 'admin',
+      activo: json['activo'] as bool? ?? true,
+      createdAt: DateTime.parse(json['created_at'].toString()),
+      updatedAt: DateTime.parse(json['updated_at'].toString()),
     );
   }
 
-  Map<String, dynamic> toCreateJson() {
-    return {
-      'customer_id': customerId,
-      'concepto': concepto,
-      'monto_total': montoTotal,
-      'fecha_limite': fechaLimite,
-      'notas': notas,
-      'usuario': usuario,
-    };
-  }
+  bool get estaPagado => estado == 'pagado';
 
-  static int _toInt(dynamic value) {
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
-  }
+  bool get estaCancelado => estado == 'cancelado';
 
-  static double _toDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
-  }
+  bool get aceptaAbonos => activo && !estaPagado && !estaCancelado;
 
-  static DateTime? _toDateTime(dynamic value) {
-    if (value == null) return null;
-    return DateTime.tryParse(value.toString());
+  double get progreso {
+    if (montoTotal <= 0) {
+      return 0;
+    }
+
+    return (montoPagado / montoTotal).clamp(0.0, 1.0);
   }
 }

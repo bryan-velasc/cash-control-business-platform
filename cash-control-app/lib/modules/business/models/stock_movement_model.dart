@@ -1,4 +1,4 @@
-﻿class StockMovementModel {
+class StockMovementModel {
   final String movementId;
   final int productId;
   final String productoNombre;
@@ -25,14 +25,11 @@
     required this.createdAt,
   });
 
-  factory StockMovementModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory StockMovementModel.fromJson(Map<String, dynamic> json) {
     return StockMovementModel(
       movementId: json['movement_id']?.toString() ?? '',
       productId: _toInt(json['product_id']),
-      productoNombre:
-          json['producto_nombre']?.toString() ?? '',
+      productoNombre: json['producto_nombre']?.toString() ?? '',
       tipo: json['tipo']?.toString() ?? '',
       stockAnterior: _toInt(json['stock_anterior']),
       cantidad: _toInt(json['cantidad']),
@@ -40,9 +37,8 @@
       motivo: json['motivo']?.toString() ?? '',
       usuario: json['usuario']?.toString() ?? 'admin',
       referencia: json['referencia']?.toString(),
-      createdAt: DateTime.tryParse(
-            json['created_at']?.toString() ?? '',
-          ) ??
+      createdAt:
+          DateTime.tryParse(json['created_at']?.toString() ?? '') ??
           DateTime.now(),
     );
   }
@@ -51,9 +47,6 @@
     if (value is int) return value;
     if (value is double) return value.toInt();
 
-    return int.tryParse(
-          value?.toString() ?? '',
-        ) ??
-        0;
+    return int.tryParse(value?.toString() ?? '') ?? 0;
   }
 }

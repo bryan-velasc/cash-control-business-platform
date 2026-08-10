@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../models/api_message_model.dart';
 import '../models/credit_model.dart';
 import '../models/credit_payment_model.dart';
 import 'api_config.dart';
@@ -14,140 +13,210 @@ class CreditService {
       headers: ApiConfig.adminHeaders,
     );
 
-    final data = _decodeResponse(response);
-
-    if (data is List) {
-      return data
-          .map((item) => CreditModel.fromJson(Map<String, dynamic>.from(item)))
-          .toList();
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
     }
 
-    throw Exception('La API no devolvió una lista de fiados.');
+    final List<dynamic> data = jsonDecode(response.body);
+
+    return data
+        .map((item) => CreditModel.fromJson(Map<String, dynamic>.from(item)))
+        .toList();
   }
 
-  static Future<CreditModel> createCredit(CreditModel credit) async {
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/credits/create'),
-      headers: ApiConfig.adminHeaders,
-      body: jsonEncode(credit.toCreateJson()),
-    );
-
-    final data = _decodeResponse(response);
-
-    return CreditModel.fromJson(Map<String, dynamic>.from(data));
-  }
-
-  static Future<CreditModel> getCreditById(int creditId) async {
+  static Future<CreditModel> getCredit(int creditId) async {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/credits/$creditId'),
       headers: ApiConfig.adminHeaders,
     );
 
-    final data = _decodeResponse(response);
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
+    }
 
-    return CreditModel.fromJson(Map<String, dynamic>.from(data));
+    return CreditModel.fromJson(
+      Map<String, dynamic>.from(jsonDecode(response.body)),
+    );
   }
 
-  static Future<List<CreditModel>> getCreditsByCustomer(int customerId) async {
+  static Future<List<CreditModel>> getCustomerCredits(int customerId) async {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/credits/customer/$customerId'),
       headers: ApiConfig.adminHeaders,
     );
 
-    final data = _decodeResponse(response);
-
-    if (data is List) {
-      return data
-          .map((item) => CreditModel.fromJson(Map<String, dynamic>.from(item)))
-          .toList();
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
     }
 
-    throw Exception('La API no devolvió una lista de fiados del cliente.');
+    final List<dynamic> data = jsonDecode(response.body);
+
+    return data
+        .map((item) => CreditModel.fromJson(Map<String, dynamic>.from(item)))
+        .toList();
+  }
+
+  static Future<CreditModel> createCredit({
+    required int customerId,
+    required String concepto,
+    required double montoTotal,
+    DateTime? fechaLimite,
+    String? notas,
+  }) async {
+    final body = {
+      'customer_id': customerId,
+      'concepto': concepto.trim(),
+      'monto_total': montoTotal,
+      'fecha_limite': fechaLimite == null ? null : _formatDate(fechaLimite),
+      'notas': _nullableText(notas),
+      'usuario': 'admin',
+    };
+
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}/credits/create'),
+      headers: ApiConfig.adminHeaders,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(_getError(response));
+    }
+
+    return CreditModel.fromJson(
+      Map<String, dynamic>.from(jsonDecode(response.body)),
+    );
   }
 
   static Future<CreditModel> updateCredit({
     required int creditId,
-    required Map<String, dynamic> data,
+    String? concepto,
+    DateTime? fechaLimite,
+    String? notas,
+    String? estado,
   }) async {
+    final body = <String, dynamic>{};
+
+    if (concepto != null) {
+      body['concepto'] = concepto.trim();
+    }
+
+    if (fechaLimite != null) {
+      body['fecha_limite'] = _formatDate(fechaLimite);
+    }
+
+    if (notas != null) {
+      body['notas'] = _nullableText(notas);
+    }
+
+    if (estado != null) {
+      body['estado'] = estado;
+    }
+
     final response = await http.put(
       Uri.parse('${ApiConfig.baseUrl}/credits/update/$creditId'),
       headers: ApiConfig.adminHeaders,
-      body: jsonEncode(data),
+      body: jsonEncode(body),
     );
 
-    final decoded = _decodeResponse(response);
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
+    }
 
-    return CreditModel.fromJson(Map<String, dynamic>.from(decoded));
+    return CreditModel.fromJson(
+      Map<String, dynamic>.from(jsonDecode(response.body)),
+    );
   }
 
-  static Future<CreditModel> registerPayment({
+  static Future<CreditPaymentModel> registerPayment({
     required int creditId,
-    required CreditPaymentModel payment,
+    required double monto,
+    String metodoPago = 'efectivo',
+    String? nota,
   }) async {
+    final body = {
+      'monto': monto,
+      'metodo_pago': metodoPago,
+      'nota': _nullableText(nota),
+      'usuario': 'admin',
+    };
+
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/credits/pay/$creditId'),
       headers: ApiConfig.adminHeaders,
-      body: jsonEncode(payment.toCreateJson()),
+      body: jsonEncode(body),
     );
 
-    final data = _decodeResponse(response);
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(_getError(response));
+    }
 
-    return CreditModel.fromJson(Map<String, dynamic>.from(data));
+    return CreditPaymentModel.fromJson(
+      Map<String, dynamic>.from(jsonDecode(response.body)),
+    );
   }
 
-  static Future<List<CreditPaymentModel>> getPaymentsByCredit(
-    int creditId,
-  ) async {
+  static Future<List<CreditPaymentModel>> getPayments(int creditId) async {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/credits/payments/$creditId'),
       headers: ApiConfig.adminHeaders,
     );
 
-    final data = _decodeResponse(response);
-
-    if (data is List) {
-      return data
-          .map(
-            (item) =>
-                CreditPaymentModel.fromJson(Map<String, dynamic>.from(item)),
-          )
-          .toList();
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
     }
 
-    if (data is Map && data['payments'] is List) {
-      final payments = data['payments'] as List;
+    final Map<String, dynamic> data = Map<String, dynamic>.from(
+      jsonDecode(response.body),
+    );
 
-      return payments
-          .map(
-            (item) =>
-                CreditPaymentModel.fromJson(Map<String, dynamic>.from(item)),
-          )
-          .toList();
-    }
+    final List<dynamic> payments = data['pagos'] as List<dynamic>? ?? [];
 
-    throw Exception('La API no devolvió una lista de abonos.');
+    return payments
+        .map(
+          (item) =>
+              CreditPaymentModel.fromJson(Map<String, dynamic>.from(item)),
+        )
+        .toList();
   }
 
-  static Future<ApiMessageModel> cancelCredit(int creditId) async {
+  static Future<void> cancelCredit(int creditId) async {
     final response = await http.delete(
       Uri.parse('${ApiConfig.baseUrl}/credits/cancel/$creditId'),
       headers: ApiConfig.adminHeaders,
     );
 
-    final data = _decodeResponse(response);
-
-    return ApiMessageModel.fromJson(Map<String, dynamic>.from(data));
+    if (response.statusCode != 200) {
+      throw Exception(_getError(response));
+    }
   }
 
-  static dynamic _decodeResponse(http.Response response) {
-    final body = response.body.isEmpty ? null : jsonDecode(response.body);
+  static String _formatDate(DateTime date) {
+    final year = date.year.toString().padLeft(4, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return body;
+    return '$year-$month-$day';
+  }
+
+  static String? _nullableText(String? value) {
+    if (value == null) {
+      return null;
     }
 
-    throw Exception(
-      'Error ${response.statusCode}: ${response.body}',
-    );
+    final text = value.trim();
+
+    return text.isEmpty ? null : text;
+  }
+
+  static String _getError(http.Response response) {
+    try {
+      final data = jsonDecode(response.body);
+
+      if (data is Map && data['detail'] != null) {
+        return data['detail'].toString();
+      }
+    } catch (_) {}
+
+    return 'Error ${response.statusCode}: ${response.body}';
   }
 }

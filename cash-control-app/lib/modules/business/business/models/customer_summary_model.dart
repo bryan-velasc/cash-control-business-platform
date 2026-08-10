@@ -1,4 +1,4 @@
-﻿class CustomerSummaryModel {
+class CustomerSummaryModel {
   final int customerId;
   final String nombre;
   final String telefono;

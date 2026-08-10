@@ -1,4 +1,4 @@
-﻿class ProductModel {
+class ProductModel {
   final int id;
   final String nombre;
   final String categoria;
@@ -32,9 +32,13 @@
       imagen: json['imagen']?.toString() ?? '',
       stock: _toInt(json['stock']),
       activo: json['activo'] == true,
-      precioCompra: json['precio_compra'] == null ? null : _toDouble(json['precio_compra']),
+      precioCompra: json['precio_compra'] == null
+          ? null
+          : _toDouble(json['precio_compra']),
       proveedor: json['proveedor']?.toString(),
-      stockMinimo: json['stock_minimo'] == null ? null : _toInt(json['stock_minimo']),
+      stockMinimo: json['stock_minimo'] == null
+          ? null
+          : _toInt(json['stock_minimo']),
     );
   }
 
