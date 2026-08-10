@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'products_screen.dart';
+import 'inventory_screen.dart';
 
 class BusinessDashboardScreen extends StatelessWidget {
   const BusinessDashboardScreen({super.key});
@@ -33,7 +34,14 @@ class BusinessDashboardScreen extends StatelessWidget {
             title: 'Inventario',
             subtitle: 'Registra entradas, salidas y ajustes.',
             icon: Icons.storefront_outlined,
-            onTap: () => _showPending(context, 'Inventario'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const InventoryScreen(),
+                ),
+              );
+            },
           ),
           _BusinessMenuCard(
             title: 'Clientes',

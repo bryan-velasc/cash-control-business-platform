@@ -76,7 +76,7 @@ class BusinessDashboardService {
       InventoryService.getLowStockProducts(),
       CustomerService.getCustomers(),
       CreditService.getCredits(),
-      InventoryService.getStockHistory(limit: 10),
+      InventoryService.getHistory(limit: 10),
     ]);
 
     return BusinessDashboardData(
