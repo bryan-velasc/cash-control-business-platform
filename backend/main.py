@@ -10,6 +10,8 @@ from app.routes.inventory_routes import router as inventory_router
 from app.routes.customer_routes import router as customer_router
 from app.routes.credit_routes import router as credit_router
 from app.routes.sale_routes import router as sale_router
+from app.routes.supplier_routes import router as supplier_router
+from app.routes.purchase_routes import router as purchase_router
 
 from app.repositories.product_repository import (
     seed_products_if_empty,
@@ -31,6 +33,14 @@ from app.repositories.sale_repository import (
     create_sales_indexes,
 )
 
+from app.repositories.supplier_repository import (
+    create_supplier_indexes,
+)
+
+from app.repositories.purchase_repository import (
+    create_purchase_indexes,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -45,6 +55,8 @@ async def lifespan(app: FastAPI):
     await create_customer_indexes()
     await create_credit_indexes()
     await create_sales_indexes()
+    await create_supplier_indexes()
+    await create_purchase_indexes()
 
     print("MongoDB conectado correctamente")
     print(f"Seed productos: {seed_result}")
@@ -52,6 +64,8 @@ async def lifespan(app: FastAPI):
     print("Índices de clientes creados")
     print("Índices de créditos creados")
     print("Índices de ventas creados")
+    print("Índices de proveedores creados")
+    print("Índices de compras creados")
 
     yield
 
@@ -66,7 +80,7 @@ app = FastAPI(
         "API para conectar la página web de dulces "
         "con Cash Control."
     ),
-    version="0.5.0",
+    version="0.7.0",
     lifespan=lifespan,
 )
 
@@ -105,7 +119,7 @@ async def root():
             "funcionando con MongoDB Atlas"
         ),
         "status": "ok",
-        "version": "0.5.0",
+        "version": "0.7.0",
         "environment": "development",
         "modules": [
             "products",
@@ -113,6 +127,8 @@ async def root():
             "customers",
             "credits",
             "sales",
+            "suppliers",
+            "purchases",
         ],
     }
 
@@ -129,7 +145,7 @@ async def health_check():
         "status": "healthy",
         "service": "cash-control-business-api",
         "database": "mongodb-atlas",
-        "version": "0.5.0",
+        "version": "0.7.0",
         "environment": "development",
     }
 
@@ -143,3 +159,5 @@ app.include_router(inventory_router)
 app.include_router(customer_router)
 app.include_router(credit_router)
 app.include_router(sale_router)
+app.include_router(supplier_router)
+app.include_router(purchase_router)
