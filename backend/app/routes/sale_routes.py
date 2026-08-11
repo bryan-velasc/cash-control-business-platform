@@ -29,6 +29,10 @@ router = APIRouter(
 )
 
 
+# ==========================================================
+# VENTAS ADMINISTRATIVAS
+# ==========================================================
+
 @router.get(
     "/admin",
     response_model=list[SaleAdmin],
@@ -71,18 +75,33 @@ async def create_sale(
     ),
 ):
     try:
-
         return await create_sale_in_db(
             sale.model_dump()
         )
 
     except ValueError as error:
-
         raise HTTPException(
             status_code=400,
             detail=str(error),
         )
 
+
+# ==========================================================
+# VENTA DESDE LA PÁGINA WEB
+# ==========================================================
+
+
+
+# ==========================================================
+# DETALLE DE UNA VENTA
+# ==========================================================
+#
+# IMPORTANTE:
+# Esta ruta debe permanecer DESPUÉS de /public.
+#
+# Así FastAPI no intenta interpretar "public"
+# como si fuera un sale_id.
+# ==========================================================
 
 @router.get(
     "/{sale_id}",
@@ -94,13 +113,11 @@ async def get_sale(
         verify_admin_token
     ),
 ):
-
     sale = await get_sale_by_id_from_db(
         sale_id
     )
 
     if not sale:
-
         raise HTTPException(
             status_code=404,
             detail="Venta no encontrada",

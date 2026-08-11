@@ -1,18 +1,47 @@
+import os
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import ping_database, close_database
+from app.database import (
+    ping_database,
+    close_database,
+)
 
-from app.routes.product_routes import router as product_router
-from app.routes.inventory_routes import router as inventory_router
-from app.routes.customer_routes import router as customer_router
-from app.routes.credit_routes import router as credit_router
-from app.routes.sale_routes import router as sale_router
-from app.routes.supplier_routes import router as supplier_router
-from app.routes.purchase_routes import router as purchase_router
-from app.routes.expense_routes import router as expense_router
+from app.routes.product_routes import (
+    router as product_router,
+)
+
+from app.routes.inventory_routes import (
+    router as inventory_router,
+)
+
+from app.routes.customer_routes import (
+    router as customer_router,
+)
+
+from app.routes.credit_routes import (
+    router as credit_router,
+)
+
+from app.routes.sale_routes import (
+    router as sale_router,
+)
+
+from app.routes.supplier_routes import (
+    router as supplier_router,
+)
+
+from app.routes.purchase_routes import (
+    router as purchase_router,
+)
+
+from app.routes.expense_routes import (
+    router as expense_router,
+)
+
 from app.routes.business_finance_routes import (
     router as business_finance_router,
 )
@@ -50,48 +79,153 @@ from app.repositories.expense_repository import (
 )
 
 
+# ==========================================================
+# CONFIGURACIÓN GENERAL
+# ==========================================================
+
+APP_VERSION = "1.0.0"
+
+ENVIRONMENT = os.getenv(
+    "ENVIRONMENT",
+    "development",
+)
+
+ALLOWED_ORIGINS_ENV = os.getenv(
+    "ALLOWED_ORIGINS",
+    (
+        "http://localhost:5500,"
+        "http://127.0.0.1:5500,"
+        "http://localhost:3000,"
+        "http://127.0.0.1:3000"
+    ),
+)
+
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in ALLOWED_ORIGINS_ENV.split(",")
+    if origin.strip()
+]
+
+
+# ==========================================================
+# LIFESPAN
+# ==========================================================
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Verificar conexión con MongoDB
+    print(
+        f"Iniciando Cash Control Business API "
+        f"v{APP_VERSION}"
+    )
+
+    print(
+        f"Entorno: {ENVIRONMENT}"
+    )
+
+    # ------------------------------------------------------
+    # Verificar MongoDB
+    # ------------------------------------------------------
+
     await ping_database()
 
-    # Semilla inicial de productos
-    seed_result = await seed_products_if_empty()
+    print(
+        "MongoDB conectado correctamente"
+    )
 
+    # ------------------------------------------------------
+    # Semilla inicial
+    # ------------------------------------------------------
+
+    seed_result = (
+        await seed_products_if_empty()
+    )
+
+    print(
+        f"Seed productos: {seed_result}"
+    )
+
+    # ------------------------------------------------------
     # Crear índices
+    # ------------------------------------------------------
+
     await create_inventory_indexes()
+
+    print(
+        "Índices de inventario creados"
+    )
+
     await create_customer_indexes()
+
+    print(
+        "Índices de clientes creados"
+    )
+
     await create_credit_indexes()
+
+    print(
+        "Índices de créditos creados"
+    )
+
     await create_sales_indexes()
+
+    print(
+        "Índices de ventas creados"
+    )
+
     await create_supplier_indexes()
+
+    print(
+        "Índices de proveedores creados"
+    )
+
     await create_purchase_indexes()
+
+    print(
+        "Índices de compras creados"
+    )
+
     await create_expense_indexes()
 
-    print("MongoDB conectado correctamente")
-    print(f"Seed productos: {seed_result}")
-    print("Índices de inventario creados")
-    print("Índices de clientes creados")
-    print("Índices de créditos creados")
-    print("Índices de ventas creados")
-    print("Índices de proveedores creados")
-    print("Índices de compras creados")
-    print("Índices de gastos creados")
-    print("Dashboard financiero disponible")
+    print(
+        "Índices de gastos creados"
+    )
+
+    print(
+        "Dashboard financiero disponible"
+    )
+
+    print(
+        "Cash Control Business API lista"
+    )
 
     yield
 
+    # ------------------------------------------------------
+    # Cierre
+    # ------------------------------------------------------
+
     await close_database()
 
-    print("Conexión MongoDB cerrada")
+    print(
+        "Conexión MongoDB cerrada"
+    )
 
+
+# ==========================================================
+# FASTAPI
+# ==========================================================
 
 app = FastAPI(
-    title="Cash Control Business Platform API",
-    description=(
-        "API para conectar la página web de dulces "
-        "con Cash Control."
+    title=(
+        "Cash Control Business Platform API"
     ),
-    version="0.9.0",
+    description=(
+        "API de Cash Control para administrar "
+        "productos, inventario, clientes, "
+        "fiados, ventas, proveedores, compras, "
+        "gastos y analítica financiera."
+    ),
+    version=APP_VERSION,
     lifespan=lifespan,
 )
 
@@ -100,21 +234,51 @@ app = FastAPI(
 # CORS
 # ==========================================================
 #
-# DESARROLLO LOCAL:
-# Flutter Web normalmente usa un puerto dinámico.
-# Por eso permitimos cualquier origen temporalmente.
+# DESARROLLO:
+#
+# ALLOWED_ORIGINS=
+# http://localhost:5500,
+# http://127.0.0.1:5500
+#
+#
+# PRODUCCIÓN:
+#
+# ALLOWED_ORIGINS=
+# https://tu-web.netlify.app,
+# https://tudominio.com
+#
 #
 # IMPORTANTE:
-# Antes de producción cambia esta configuración
-# por los dominios reales autorizados.
+#
+# Ya no usamos:
+#
+# allow_origins=["*"]
+#
+# para evitar exponer innecesariamente
+# el backend a cualquier origen.
+#
 # ==========================================================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+
+    allow_origins=ALLOWED_ORIGINS,
+
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+
+    allow_methods=[
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
+    ],
+
+    allow_headers=[
+        "Content-Type",
+        "x-admin-token",
+    ],
 )
 
 
@@ -126,12 +290,17 @@ app.add_middleware(
 async def root():
     return {
         "message": (
-            "Cash Control Business Platform API "
-            "funcionando con MongoDB Atlas"
+            "Cash Control Business Platform API"
         ),
+
         "status": "ok",
-        "version": "0.9.0",
-        "environment": "development",
+
+        "version": APP_VERSION,
+
+        "environment": ENVIRONMENT,
+
+        "database": "mongodb-atlas",
+
         "modules": [
             "products",
             "inventory",
@@ -156,10 +325,18 @@ async def health_check():
 
     return {
         "status": "healthy",
-        "service": "cash-control-business-api",
-        "database": "mongodb-atlas",
-        "version": "0.9.0",
-        "environment": "development",
+
+        "service": (
+            "cash-control-business-api"
+        ),
+
+        "database": (
+            "mongodb-atlas"
+        ),
+
+        "version": APP_VERSION,
+
+        "environment": ENVIRONMENT,
     }
 
 
@@ -167,12 +344,38 @@ async def health_check():
 # ROUTERS
 # ==========================================================
 
-app.include_router(product_router)
-app.include_router(inventory_router)
-app.include_router(customer_router)
-app.include_router(credit_router)
-app.include_router(sale_router)
-app.include_router(supplier_router)
-app.include_router(purchase_router)
-app.include_router(expense_router)
-app.include_router(business_finance_router)
+app.include_router(
+    product_router
+)
+
+app.include_router(
+    inventory_router
+)
+
+app.include_router(
+    customer_router
+)
+
+app.include_router(
+    credit_router
+)
+
+app.include_router(
+    sale_router
+)
+
+app.include_router(
+    supplier_router
+)
+
+app.include_router(
+    purchase_router
+)
+
+app.include_router(
+    expense_router
+)
+
+app.include_router(
+    business_finance_router
+)
