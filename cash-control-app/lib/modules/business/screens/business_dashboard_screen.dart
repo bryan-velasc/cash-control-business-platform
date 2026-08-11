@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'products_screen.dart';
 import 'inventory_screen.dart';
 import 'sales_screen.dart';
+import 'suppliers_screen.dart';
+import 'purchases_screen.dart';
 import 'customers_screen.dart';
 import 'credits_screen.dart';
 
@@ -51,6 +53,30 @@ class BusinessDashboardScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const SalesScreen()),
+              );
+            },
+          ),
+
+          _BusinessMenuCard(
+            title: 'Proveedores',
+            subtitle: 'Administra contactos y compras por proveedor.',
+            icon: Icons.local_shipping_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SuppliersScreen()),
+              );
+            },
+          ),
+
+          _BusinessMenuCard(
+            title: 'Compras / Reinversión',
+            subtitle: 'Registra compras, costos y entradas de inventario.',
+            icon: Icons.shopping_cart_checkout_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PurchasesScreen()),
               );
             },
           ),
@@ -105,7 +131,8 @@ class _BusinessIntroCard extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'Administra productos, inventario, ventas, caja, '
-              'clientes, fiados y abonos desde un solo lugar.',
+              'proveedores, compras, reinversión, clientes, fiados '
+              'y abonos desde un solo lugar.',
             ),
           ],
         ),
