@@ -26,7 +26,8 @@ let calificacionActual = 0;
 //
 // ==========================================================
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL =
+    "https://cash-control-business-platform.onrender.com";
 
 const API_PRODUCTOS_URL =
     `${API_BASE_URL}/products/public`;
