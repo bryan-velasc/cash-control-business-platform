@@ -12,6 +12,10 @@ from app.routes.credit_routes import router as credit_router
 from app.routes.sale_routes import router as sale_router
 from app.routes.supplier_routes import router as supplier_router
 from app.routes.purchase_routes import router as purchase_router
+from app.routes.expense_routes import router as expense_router
+from app.routes.business_finance_routes import (
+    router as business_finance_router,
+)
 
 from app.repositories.product_repository import (
     seed_products_if_empty,
@@ -41,6 +45,10 @@ from app.repositories.purchase_repository import (
     create_purchase_indexes,
 )
 
+from app.repositories.expense_repository import (
+    create_expense_indexes,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -57,6 +65,7 @@ async def lifespan(app: FastAPI):
     await create_sales_indexes()
     await create_supplier_indexes()
     await create_purchase_indexes()
+    await create_expense_indexes()
 
     print("MongoDB conectado correctamente")
     print(f"Seed productos: {seed_result}")
@@ -66,6 +75,8 @@ async def lifespan(app: FastAPI):
     print("Índices de ventas creados")
     print("Índices de proveedores creados")
     print("Índices de compras creados")
+    print("Índices de gastos creados")
+    print("Dashboard financiero disponible")
 
     yield
 
@@ -80,7 +91,7 @@ app = FastAPI(
         "API para conectar la página web de dulces "
         "con Cash Control."
     ),
-    version="0.7.0",
+    version="0.9.0",
     lifespan=lifespan,
 )
 
@@ -119,7 +130,7 @@ async def root():
             "funcionando con MongoDB Atlas"
         ),
         "status": "ok",
-        "version": "0.7.0",
+        "version": "0.9.0",
         "environment": "development",
         "modules": [
             "products",
@@ -129,6 +140,8 @@ async def root():
             "sales",
             "suppliers",
             "purchases",
+            "expenses",
+            "business-finance",
         ],
     }
 
@@ -145,7 +158,7 @@ async def health_check():
         "status": "healthy",
         "service": "cash-control-business-api",
         "database": "mongodb-atlas",
-        "version": "0.7.0",
+        "version": "0.9.0",
         "environment": "development",
     }
 
@@ -161,3 +174,5 @@ app.include_router(credit_router)
 app.include_router(sale_router)
 app.include_router(supplier_router)
 app.include_router(purchase_router)
+app.include_router(expense_router)
+app.include_router(business_finance_router)

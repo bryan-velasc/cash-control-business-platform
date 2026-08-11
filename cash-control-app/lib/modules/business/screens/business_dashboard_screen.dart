@@ -5,8 +5,10 @@ import 'inventory_screen.dart';
 import 'sales_screen.dart';
 import 'suppliers_screen.dart';
 import 'purchases_screen.dart';
+import 'expenses_screen.dart';
 import 'customers_screen.dart';
 import 'credits_screen.dart';
+import 'business_finance_screen.dart';
 
 class BusinessDashboardScreen extends StatelessWidget {
   const BusinessDashboardScreen({super.key});
@@ -19,8 +21,27 @@ class BusinessDashboardScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           const _BusinessIntroCard(),
+
           const SizedBox(height: 16),
 
+          _BusinessMenuCard(
+            title: 'Resumen Financiero',
+            subtitle:
+                'Consulta ventas, utilidad, gastos, reinversión, ROI e inventario.',
+            icon: Icons.insights_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const BusinessFinanceScreen(),
+                ),
+              );
+            },
+          ),
+
+          // ============================================================
+          // PRODUCTOS
+          // ============================================================
           _BusinessMenuCard(
             title: 'Productos',
             subtitle: 'Administra catálogo, precios y stock.',
@@ -33,6 +54,9 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // INVENTARIO
+          // ============================================================
           _BusinessMenuCard(
             title: 'Inventario',
             subtitle: 'Registra entradas, salidas y ajustes.',
@@ -45,6 +69,9 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // VENTAS / CAJA
+          // ============================================================
           _BusinessMenuCard(
             title: 'Ventas / Caja',
             subtitle: 'Registra ventas, cobros y consulta utilidades.',
@@ -57,6 +84,9 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // PROVEEDORES
+          // ============================================================
           _BusinessMenuCard(
             title: 'Proveedores',
             subtitle: 'Administra contactos y compras por proveedor.',
@@ -69,6 +99,9 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // COMPRAS / REINVERSIÓN
+          // ============================================================
           _BusinessMenuCard(
             title: 'Compras / Reinversión',
             subtitle: 'Registra compras, costos y entradas de inventario.',
@@ -81,6 +114,24 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // GASTOS
+          // ============================================================
+          _BusinessMenuCard(
+            title: 'Gastos',
+            subtitle: 'Registra gastos operativos y consulta su impacto.',
+            icon: Icons.money_off_csred_outlined,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ExpensesScreen()),
+              );
+            },
+          ),
+
+          // ============================================================
+          // CLIENTES
+          // ============================================================
           _BusinessMenuCard(
             title: 'Clientes',
             subtitle: 'Controla clientes y datos de contacto.',
@@ -93,6 +144,9 @@ class BusinessDashboardScreen extends StatelessWidget {
             },
           ),
 
+          // ============================================================
+          // FIADOS
+          // ============================================================
           _BusinessMenuCard(
             title: 'Fiados',
             subtitle: 'Consulta deudas, abonos y saldos pendientes.',
@@ -109,6 +163,10 @@ class BusinessDashboardScreen extends StatelessWidget {
     );
   }
 }
+
+// ======================================================================
+// TARJETA PRINCIPAL
+// ======================================================================
 
 class _BusinessIntroCard extends StatelessWidget {
   const _BusinessIntroCard();
@@ -131,8 +189,8 @@ class _BusinessIntroCard extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'Administra productos, inventario, ventas, caja, '
-              'proveedores, compras, reinversión, clientes, fiados '
-              'y abonos desde un solo lugar.',
+              'proveedores, compras, reinversión, gastos, clientes, '
+              'fiados y abonos desde un solo lugar.',
             ),
           ],
         ),
@@ -140,6 +198,10 @@ class _BusinessIntroCard extends StatelessWidget {
     );
   }
 }
+
+// ======================================================================
+// TARJETA DEL MENÚ
+// ======================================================================
 
 class _BusinessMenuCard extends StatelessWidget {
   final String title;
