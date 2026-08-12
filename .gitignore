@@ -50,3 +50,7 @@ cash-control-app/android/key.properties
 cash-control-app/**/*.jks
 cash-control-app/.env
 cash-control-app/**/.env
+
+cash-control-app/windows/flutter/ephemeral/
+cash-control-app/linux/flutter/ephemeral/
+cash-control-app/macos/Flutter/ephemeral/
