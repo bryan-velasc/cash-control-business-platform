@@ -264,6 +264,12 @@ app.add_middleware(
 
     allow_origins=ALLOWED_ORIGINS,
 
+    # Permitir Flutter Web local en cualquier puerto
+    # durante pruebas desde Chrome.
+    allow_origin_regex=(
+        r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
+    ),
+
     allow_credentials=False,
 
     allow_methods=[
@@ -280,7 +286,6 @@ app.add_middleware(
         "x-admin-token",
     ],
 )
-
 
 # ==========================================================
 # ENDPOINT PRINCIPAL

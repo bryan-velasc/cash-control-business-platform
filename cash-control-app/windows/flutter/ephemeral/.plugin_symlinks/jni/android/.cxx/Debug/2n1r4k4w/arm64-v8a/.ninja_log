@@ -1,7 +1,0 @@
-# ninja log v5
-16	674	8012660156133232	CMakeFiles/jni.dir/include/dart_api_dl.c.o	ab95f5d7f116fdf6
-27	1340	8012660162780000	CMakeFiles/jni.dir/dartjni.c.o	b8e33e624395633
-2	1523	8012660164542633	CMakeFiles/jni.dir/third_party/global_jni_env.c.o	40d95584b2a955ec
-1524	1702	8012660166439439	C:/Users/velas/Desktop/cash-control/frontend/build/jni/intermediates/cxx/Debug/2n1r4k4w/obj/arm64-v8a/libdartjni.so	7d21c5e70837f805
-23	196	8012747153794671	C:/Users/velas/Desktop/cash-control/frontend/build/jni/intermediates/cxx/Debug/2n1r4k4w/obj/arm64-v8a/libdartjni.so	7d21c5e70837f805
-21	306	8012950106824345	C:/Users/velas/Desktop/cash-control/frontend/build/jni/intermediates/cxx/Debug/2n1r4k4w/obj/arm64-v8a/libdartjni.so	7d21c5e70837f805

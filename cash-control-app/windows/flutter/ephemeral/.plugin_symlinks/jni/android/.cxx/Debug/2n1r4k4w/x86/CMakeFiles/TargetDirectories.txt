@@ -1,3 +1,0 @@
-C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/x86/CMakeFiles/jni.dir
-C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/x86/CMakeFiles/edit_cache.dir
-C:/Users/velas/AppData/Local/Pub/Cache/hosted/pub.dev/jni-1.0.0/android/.cxx/Debug/2n1r4k4w/x86/CMakeFiles/rebuild_cache.dir
